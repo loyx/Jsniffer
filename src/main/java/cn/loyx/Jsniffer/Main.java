@@ -1,18 +1,10 @@
 package cn.loyx.Jsniffer;
 
-import javafx.beans.property.adapter.JavaBeanProperty;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
-import org.jnetpcap.packet.JHeader;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.JPacketHandler;
-import org.jnetpcap.packet.format.TextFormatter;
-import org.jnetpcap.packet.format.XmlFormatter;
-import org.jnetpcap.protocol.JProtocol;
-import org.jnetpcap.protocol.lan.Ethernet;
 
-import javax.xml.xpath.XPath;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +32,11 @@ public class Main {
             public void nextPacket(JPacket packet, PrintStream user) {
                 Extractor extractor = Extractors.createExtractor(packet);
                 System.out.println(extractor);
+                System.out.println(extractor.toTextFormatterDump());
             }
         };
 
         Pcap pcap = Pcap.openLive(dev.getName(), Pcap.DEFAULT_JPACKET_BUFFER_SIZE, Pcap.DEFAULT_PROMISC, 60*1000, errBuf);
-        pcap.loop(100, handler, System.out);
+        pcap.loop(1000, handler, System.out);
     }
 }

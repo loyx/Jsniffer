@@ -3,6 +3,7 @@ package cn.loyx.Jsniffer;
 import org.jnetpcap.packet.JHeader;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.protocol.JProtocol;
+import org.jnetpcap.protocol.network.Ip6;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +18,9 @@ public class Extractors {
         extractors = new HashMap<>();
         extractors.put("Arp", ArpExtractor.class);
         extractors.put("Ethernet", EthernetExtractor.class);
+        extractors.put("Ip6", Ip6Extractor.class);
+        extractors.put("Ip4", Ip4Extractor.class);
+        extractors.put("Udp", UdpExtractor.class);
         extractors.put("Unknown", UnknownExtractor.class);
     }
 
