@@ -1,10 +1,11 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel.Protocols.lan;
 
+import cn.loyx.Jsniffer.kernel.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 
-public class EthernetExtractor extends Extractor{
+public class EthernetExtractor extends Extractor {
     private final Ethernet eth;
 
     public EthernetExtractor(JPacket packet) {
@@ -20,6 +21,11 @@ public class EthernetExtractor extends Extractor{
     @Override
     public String getDestination() {
         return FormatUtils.mac(eth.destination());
+    }
+
+    @Override
+    public String getProtocol() {
+        return eth.getName();
     }
 
     @Override

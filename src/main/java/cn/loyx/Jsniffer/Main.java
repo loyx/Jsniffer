@@ -1,5 +1,7 @@
 package cn.loyx.Jsniffer;
 
+import cn.loyx.Jsniffer.kernel.Extractor;
+import cn.loyx.Jsniffer.kernel.Extractors;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.JPacket;
@@ -32,7 +34,7 @@ public class Main {
             public void nextPacket(JPacket packet, PrintStream user) {
                 Extractor extractor = Extractors.createExtractor(packet);
                 System.out.println(extractor);
-                System.out.println(extractor.toTextFormatterDump());
+//                System.out.println(extractor.toTextFormatterDump());
             }
         };
 

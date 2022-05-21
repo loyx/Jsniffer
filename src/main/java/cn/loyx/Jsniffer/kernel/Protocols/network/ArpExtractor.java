@@ -1,8 +1,8 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel.Protocols.network;
 
+import cn.loyx.Jsniffer.kernel.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
-import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Arp;
 
 public class ArpExtractor extends Extractor {
@@ -22,6 +22,11 @@ public class ArpExtractor extends Extractor {
     @Override
     public String getDestination() {
         return "Broadcast";
+    }
+
+    @Override
+    public String getProtocol() {
+        return arp.getName();
     }
 
     @Override

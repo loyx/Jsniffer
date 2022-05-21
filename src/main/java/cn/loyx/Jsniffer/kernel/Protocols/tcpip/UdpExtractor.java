@@ -1,14 +1,13 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel.Protocols.tcpip;
 
+import cn.loyx.Jsniffer.kernel.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
 import org.jnetpcap.protocol.tcpip.Udp;
 
-import java.security.PrivateKey;
-
-public class UdpExtractor extends Extractor{
+public class UdpExtractor extends Extractor {
     private final Udp udp;
     private final String source;
     private final String destination;
@@ -37,6 +36,11 @@ public class UdpExtractor extends Extractor{
     @Override
     public String getDestination() {
         return destination;
+    }
+
+    @Override
+    public String getProtocol() {
+        return udp.getName();
     }
 
     @Override

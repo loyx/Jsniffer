@@ -1,17 +1,13 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel;
 
-import org.jnetpcap.packet.JHeader;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.TextFormatter;
 import org.jnetpcap.packet.format.XmlFormatter;
-import org.jnetpcap.protocol.JProtocol;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 
 public abstract class Extractor implements ModelAccessor {
-
-    private static final int PROTOCOL_HEADER_OFFSET = 2;
     private static final ThreadLocal<TextFormatter> textFormatterPool =
             ThreadLocal.withInitial(() -> new TextFormatter(new StringBuilder()));
 
@@ -37,18 +33,7 @@ public abstract class Extractor implements ModelAccessor {
 
     public abstract String getDestination();
 
-    @Override
-    public String getProtocol() {
-        JHeader jHeader;
-        try {
-            jHeader = JProtocol.valueOf(
-                    packet.getHeaderIdByIndex(packet.getHeaderCount() - PROTOCOL_HEADER_OFFSET)
-            ).getClazz().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return packet.getHeader(jHeader).getName();
-    }
+    public abstract String getProtocol();
 
     @Override
     public int getLength() {

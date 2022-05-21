@@ -1,4 +1,4 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel;
 
 import java.sql.Timestamp;
 

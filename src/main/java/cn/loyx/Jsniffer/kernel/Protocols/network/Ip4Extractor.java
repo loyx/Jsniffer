@@ -1,10 +1,11 @@
-package cn.loyx.Jsniffer;
+package cn.loyx.Jsniffer.kernel.Protocols.network;
 
+import cn.loyx.Jsniffer.kernel.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 
-public class Ip4Extractor extends Extractor{
+public class Ip4Extractor extends Extractor {
     private final Ip4 ip4;
 
     public Ip4Extractor(JPacket packet) {
@@ -20,6 +21,11 @@ public class Ip4Extractor extends Extractor{
     @Override
     public String getDestination() {
         return FormatUtils.ip(ip4.destination());
+    }
+
+    @Override
+    public String getProtocol() {
+        return ip4.getName();
     }
 
     @Override
