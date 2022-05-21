@@ -37,7 +37,7 @@ public class TCPExtractor extends Extractor {
         int fMask = tcp.flags();
         for (int i = 0; i < 8; i++) {
             if ((fMask & (1 << 7-i)) != 0){
-                if (i != 0) flagStr.append(", ");
+                if (flagStr.length() != 0) flagStr.append(", ");
                 flagStr.append(flags[i]);
             }
         }
