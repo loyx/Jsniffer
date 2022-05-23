@@ -2,7 +2,6 @@ package cn.loyx.Jsniffer.ui;
 
 import cn.loyx.Jsniffer.service.CaptureService;
 import cn.loyx.Jsniffer.service.DevicesService;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +27,8 @@ public class MainForm {
     private JTextField initialFilter;
     private JTable devicesTable;
     private JComboBox<String> deviceTypes;
+    private JTextArea packetDetailArea;
+    private JTextArea packetHexArea;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -53,6 +54,18 @@ public class MainForm {
         createInitialCardPanel();
         createContentCardPanel();
 
+        packetTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = packetTable.getSelectedRow();
+                if (selectedRow != -1){
+                    packetDetailArea.setText(captureService.getPacketDetail(selectedRow));
+                    packetHexArea.setText(captureService.getPacketHex(selectedRow));
+                    packetDetailArea.repaint();
+                    packetHexArea.repaint();
+                }
+            }
+        });
     }
 
     private void createButtons() {

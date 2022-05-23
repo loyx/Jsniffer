@@ -226,10 +226,50 @@
                     <children>
                       <component id="98fbd" class="javax.swing.JTable" binding="packetTable">
                         <constraints/>
-                        <properties/>
+                        <properties>
+                          <autoCreateRowSorter value="true"/>
+                        </properties>
                       </component>
                     </children>
                   </scrollpane>
+                  <splitpane id="5b4f0">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties>
+                      <dividerSize value="5"/>
+                      <orientation value="0"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <scrollpane id="7e4d2">
+                        <constraints>
+                          <splitpane position="left"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="5a921" class="javax.swing.JTextArea" binding="packetDetailArea">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                      <scrollpane id="29093">
+                        <constraints>
+                          <splitpane position="right"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="cb4a" class="javax.swing.JTextArea" binding="packetHexArea">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
+                  </splitpane>
                 </children>
               </splitpane>
             </children>
