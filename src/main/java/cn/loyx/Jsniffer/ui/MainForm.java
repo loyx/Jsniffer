@@ -26,14 +26,22 @@ public class MainForm {
     private JTable devicesTable;
     private JComboBox<String> deviceTypes;
 
+    private final CardLayout contentPanelLayout;
+
     private final DevicesService devicesService;
 
     public MainForm() {
+        // initial services
         devicesService = new DevicesService();
 
+        // initial field
+        contentPanelLayout = (CardLayout) contentPanel.getLayout();
+
+        // set GUI
         createButtons();
         createInitialCardPanel();
         createContentCardPanel();
+
     }
 
     private void createButtons() {
@@ -44,8 +52,9 @@ public class MainForm {
         devicesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout layout = (CardLayout) contentPanel.getLayout();
-                layout.show(contentPanel, initialPanel.getName());
+//                CardLayout layout = (CardLayout) contentPanel.getLayout();
+//                layout.show(contentPanel, initialPanel.getName());
+                contentPanelLayout.show(contentPanel, initialPanel.getName());
             }
         });
         startButton.addActionListener(new ActionListener() {
@@ -53,8 +62,9 @@ public class MainForm {
             public void actionPerformed(ActionEvent e) {
                 if (devicesTable.getSelectedRow() != -1){
                     // switch card
-                    CardLayout layout = (CardLayout)contentPanel.getLayout();
-                    layout.show(contentPanel, capturePanel.getName());
+//                    CardLayout layout = (CardLayout)contentPanel.getLayout();
+//                    layout.show(contentPanel, capturePanel.getName());
+                    contentPanelLayout.show(contentPanel, capturePanel.getName());
 
                     // enable stop and save
                     stopButton.setEnabled(true);
@@ -71,16 +81,17 @@ public class MainForm {
     }
 
     private void createInitialCardPanel() {
-        createDivesTable();
+        createDivcesTable();
     }
 
-    private void createDivesTable() {
+    private void createDivcesTable() {
         DefaultTableModel defaultTableModel = new DefaultTableModel(getDeviceData(), new Object[]{"Devices"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         devicesTable.setModel(defaultTableModel);
 
         devicesTable.addMouseListener(new MouseAdapter() {
@@ -88,6 +99,9 @@ public class MainForm {
             public void mouseClicked(MouseEvent e) {
                 if (devicesTable.getSelectedRow() != -1){
                     startButton.setEnabled(true);
+                }
+                if (e.getClickCount() == 2){
+                    contentPanelLayout.show(contentPanel, capturePanel.getName());
                 }
                 super.mouseClicked(e);
             }
