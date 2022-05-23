@@ -1,13 +1,12 @@
 package cn.loyx.Jsniffer.ui;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
+import cn.loyx.Jsniffer.service.DevicesService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class MainForm {
     private JPanel root;
@@ -27,13 +26,21 @@ public class MainForm {
     private JTable devicesTable;
     private JComboBox<String> deviceTypes;
 
+    private final DevicesService devicesService;
+
     public MainForm() {
+        devicesService = new DevicesService();
+
+        createButtons();
         createInitialCardPanel();
         createContentCardPanel();
     }
 
-    private void createContentCardPanel() {
-        createPacketTable();
+    private void createButtons() {
+        startButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        saveButton.setEnabled(false);
+
         devicesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,10 +51,22 @@ public class MainForm {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout layout = (CardLayout)contentPanel.getLayout();
-                layout.show(contentPanel, capturePanel.getName());
+                if (devicesTable.getSelectedRow() != -1){
+                    // switch card
+                    CardLayout layout = (CardLayout)contentPanel.getLayout();
+                    layout.show(contentPanel, capturePanel.getName());
+
+                    // enable stop and save
+                    stopButton.setEnabled(true);
+                    saveButton.setEnabled(true);
+
+                }
             }
         });
+    }
+
+    private void createContentCardPanel() {
+        createPacketTable();
 
     }
 
@@ -56,13 +75,32 @@ public class MainForm {
     }
 
     private void createDivesTable() {
-        devicesTable.setModel(new DefaultTableModel(
-                new Object[][]{
-                        {"WLAN"},
-                        {"local"}
-                },
-                new String[]{"Devices"}
-        ));
+        DefaultTableModel defaultTableModel = new DefaultTableModel(getDeviceData(), new Object[]{"Devices"}) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        devicesTable.setModel(defaultTableModel);
+
+        devicesTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (devicesTable.getSelectedRow() != -1){
+                    startButton.setEnabled(true);
+                }
+                super.mouseClicked(e);
+            }
+        });
+    }
+
+    private Object[][] getDeviceData(){
+        String[] devicesName = devicesService.getDevicesDescription();
+        Object[][] data = new Object[devicesName.length][];
+        for (int i = 0; i < devicesName.length; i++) {
+            data[i] = new Object[]{devicesName[i]};
+        }
+        return data;
     }
 
     public JPanel getRoot() {

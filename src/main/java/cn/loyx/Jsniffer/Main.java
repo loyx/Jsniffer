@@ -1,7 +1,7 @@
 package cn.loyx.Jsniffer;
 
-import cn.loyx.Jsniffer.kernel.Extractor;
-import cn.loyx.Jsniffer.kernel.Extractors;
+import cn.loyx.Jsniffer.capture.Extractor;
+import cn.loyx.Jsniffer.capture.Extractors;
 import cn.loyx.Jsniffer.ui.MainForm;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapBpfProgram;
