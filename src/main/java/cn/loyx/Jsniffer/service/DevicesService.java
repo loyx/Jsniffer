@@ -17,6 +17,7 @@ public class DevicesService {
     }
 
     public void setSelectDevIndex(int selectDevIndex) {
+        System.out.println("select: " + selectDevIndex);
         this.selectDevIndex = selectDevIndex;
     }
 
@@ -40,7 +41,7 @@ public class DevicesService {
         }
         return desc;
     }
-    public String[] getDevicesName(){
+    public String[] getDevicesNames(){
         String[] names = new String[devs.size()];
         for (int i = 0; i < devs.size(); i++) {
             names[i] = devs.get(i).getName();

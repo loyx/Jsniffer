@@ -1,10 +1,13 @@
 package cn.loyx.Jsniffer.ui;
 
+import cn.loyx.Jsniffer.service.CaptureService;
 import cn.loyx.Jsniffer.service.DevicesService;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -26,16 +29,24 @@ public class MainForm {
     private JTable devicesTable;
     private JComboBox<String> deviceTypes;
 
+    // field
     private final CardLayout contentPanelLayout;
+    private final DefaultTableModel packetTableModel;
 
+    // services
     private final DevicesService devicesService;
+    private final CaptureService captureService;
 
     public MainForm() {
-        // initial services
-        devicesService = new DevicesService();
-
         // initial field
         contentPanelLayout = (CardLayout) contentPanel.getLayout();
+        String[] columnNames = {"No.", "Time", "Source", "Destination", "Protocol", "Length", "Info"};
+        packetTableModel = new DefaultTableModel(columnNames, 0);
+
+        // initial services
+        devicesService = new DevicesService();
+        captureService = new CaptureService(packetTableModel);
+
 
         // set GUI
         createButtons();
@@ -52,8 +63,6 @@ public class MainForm {
         devicesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                CardLayout layout = (CardLayout) contentPanel.getLayout();
-//                layout.show(contentPanel, initialPanel.getName());
                 contentPanelLayout.show(contentPanel, initialPanel.getName());
             }
         });
@@ -62,15 +71,21 @@ public class MainForm {
             public void actionPerformed(ActionEvent e) {
                 if (devicesTable.getSelectedRow() != -1){
                     // switch card
-//                    CardLayout layout = (CardLayout)contentPanel.getLayout();
-//                    layout.show(contentPanel, capturePanel.getName());
                     contentPanelLayout.show(contentPanel, capturePanel.getName());
 
                     // enable stop and save
                     stopButton.setEnabled(true);
                     saveButton.setEnabled(true);
 
+                    // start capture
+                    captureService.startCapture(devicesService.getSelectDev());
                 }
+            }
+        });
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                captureService.stopCapture();
             }
         });
     }
@@ -81,10 +96,10 @@ public class MainForm {
     }
 
     private void createInitialCardPanel() {
-        createDivcesTable();
+        createDevicesTable();
     }
 
-    private void createDivcesTable() {
+    private void createDevicesTable() {
         DefaultTableModel defaultTableModel = new DefaultTableModel(getDeviceData(), new Object[]{"Devices"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -99,6 +114,7 @@ public class MainForm {
             public void mouseClicked(MouseEvent e) {
                 if (devicesTable.getSelectedRow() != -1){
                     startButton.setEnabled(true);
+                    devicesService.setSelectDevIndex(devicesTable.getSelectedRow());
                 }
                 if (e.getClickCount() == 2){
                     contentPanelLayout.show(contentPanel, capturePanel.getName());
@@ -120,15 +136,13 @@ public class MainForm {
     public JPanel getRoot() {
         return root;
     }
+
+    public TableModel getPacketTableModel() {
+        return packetTableModel;
+    }
+
     private void createPacketTable() {
-        packetTable.setModel(new DefaultTableModel(
-                new Object[][]{
-                        {1, "2022", "0.0.0.0", "1.1.1.1", "TCP", "62", "test info"},
-                        {2, "2023", "0.0.0.1", "1.1.1.2", "ICMP", "62", "test info"},
-                        {3, "2024", "0.0.0.2", "1.1.1.3", "Eth", "62", "test info"}
-                },
-                new String[]{"No.", "Time", "Source", "Destination", "Protocol", "Length", "Info"}
-        ));
+        packetTable.setModel(packetTableModel);
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setMaxWidth(50);
         packetTable.getTableHeader().setReorderingAllowed(false);
