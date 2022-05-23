@@ -1,15 +1,18 @@
-package cn.loyx.Jsniffer.kernel.Protocols.network;
+package cn.loyx.Jsniffer.capture.Protocols.application;
 
-import cn.loyx.Jsniffer.kernel.Extractor;
+import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
+import org.jnetpcap.protocol.tcpip.Http;
 
-public class Ip4Extractor extends Extractor {
+public class HttpExtractor extends Extractor {
+    private final Http http;
     private final Ip4 ip4;
 
-    public Ip4Extractor(JPacket packet) {
+    public HttpExtractor(JPacket packet) {
         super(packet);
+        http = packet.getHeader(new Http());
         ip4 = packet.getHeader(new Ip4());
     }
 
@@ -25,11 +28,11 @@ public class Ip4Extractor extends Extractor {
 
     @Override
     public String getProtocol() {
-        return ip4.getName();
+        return http.getName();
     }
 
     @Override
     public String getInfo() {
-        return "IPv4";
+        return http.contentType();
     }
 }

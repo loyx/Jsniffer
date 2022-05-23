@@ -1,6 +1,6 @@
-package cn.loyx.Jsniffer.kernel.Protocols.network;
+package cn.loyx.Jsniffer.capture.Protocols.network;
 
-import cn.loyx.Jsniffer.kernel.Extractor;
+import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Icmp;

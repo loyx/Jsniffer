@@ -1,6 +1,6 @@
-package cn.loyx.Jsniffer.kernel.Protocols;
+package cn.loyx.Jsniffer.capture.Protocols;
 
-import cn.loyx.Jsniffer.kernel.Extractor;
+import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
 
 public class UnknownExtractor extends Extractor {

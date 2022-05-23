@@ -1,6 +1,6 @@
-package cn.loyx.Jsniffer.kernel.Protocols.lan;
+package cn.loyx.Jsniffer.capture.Protocols.lan;
 
-import cn.loyx.Jsniffer.kernel.Extractor;
+import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;

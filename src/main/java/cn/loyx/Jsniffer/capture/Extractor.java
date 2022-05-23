@@ -1,4 +1,4 @@
-package cn.loyx.Jsniffer.kernel;
+package cn.loyx.Jsniffer.capture;
 
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.format.TextFormatter;
