@@ -4,11 +4,13 @@ import cn.loyx.Jsniffer.service.CaptureService;
 import cn.loyx.Jsniffer.service.DevicesService;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class MainForm {
     private JPanel root;
@@ -106,6 +108,42 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 captureService.clearHistory();
+            }
+        });
+
+        File currentDir = new File("."); // current directory
+        FileFilter jSnifferFileType = new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) return true;
+                else return f.getName().toLowerCase().equals(".jsn");
+            }
+            @Override
+            public String getDescription() {
+                return "JSniffer file (*.jsn)";
+            }
+        };
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(currentDir);
+                fileChooser.setFileFilter(jSnifferFileType);
+                if (fileChooser.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
+                    System.out.println("save file to " + fileChooser.getSelectedFile());
+                }
+            }
+        });
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(currentDir);
+                fileChooser.setFileFilter(jSnifferFileType);
+                if (fileChooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
+                    System.out.println("load file from " + fileChooser.getSelectedFile());
+                }
             }
         });
     }
