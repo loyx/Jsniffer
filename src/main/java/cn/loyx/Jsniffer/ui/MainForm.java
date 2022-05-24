@@ -32,6 +32,9 @@ public class MainForm {
     private JTextArea packetDetailArea;
     private JTextArea packetHexArea;
     private JButton clearButton;
+    private JPanel statusBar;
+    private JLabel statusBarDevName;
+    private JLabel statusBarCaptureStatus;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -65,6 +68,9 @@ public class MainForm {
         stopButton.setEnabled(false);
         saveButton.setEnabled(false);
 
+        // set status Bar
+        statusBarCaptureStatus.setText("stop");
+
         devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
         startButton.addActionListener(e -> {
             if (devicesTable.getSelectedRow() != -1){
@@ -75,11 +81,20 @@ public class MainForm {
                 stopButton.setEnabled(true);
                 saveButton.setEnabled(true);
 
+                // update status bar
+                statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
+                statusBarCaptureStatus.setText("Capturing...");
+
                 // start capture
                 captureService.startCapture(devicesService.getSelectDev());
             }
         });
-        stopButton.addActionListener(e -> captureService.stopCapture());
+        stopButton.addActionListener(e -> {
+            captureService.stopCapture();
+
+            // update status bar
+            statusBarCaptureStatus.setText("stop");
+        });
         clearButton.addActionListener(e -> captureService.clearHistory());
 
         File currentDir = new File("."); // current directory
@@ -159,6 +174,9 @@ public class MainForm {
                 }
                 if (e.getClickCount() == 2){
                     contentPanelLayout.show(contentPanel, capturePanel.getName());
+
+                    // update status bar
+                    statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
                 }
                 super.mouseClicked(e);
             }

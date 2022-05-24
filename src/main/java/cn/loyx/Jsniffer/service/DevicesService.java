@@ -25,6 +25,10 @@ public class DevicesService {
         return devs.get(selectDevIndex).getName();
     }
 
+    public String getSelectDevName(){
+        return devs.get(selectDevIndex).getDescription();
+    }
+
     public void refreshDevices(){
         devs = new ArrayList<>();
         StringBuilder errBuf = new StringBuilder();
@@ -40,12 +44,5 @@ public class DevicesService {
             desc[i] = devs.get(i).getDescription();
         }
         return desc;
-    }
-    public String[] getDevicesNames(){
-        String[] names = new String[devs.size()];
-        for (int i = 0; i < devs.size(); i++) {
-            names[i] = devs.get(i).getName();
-        }
-        return names;
     }
 }
