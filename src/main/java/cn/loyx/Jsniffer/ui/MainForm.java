@@ -29,6 +29,7 @@ public class MainForm {
     private JComboBox<String> deviceTypes;
     private JTextArea packetDetailArea;
     private JTextArea packetHexArea;
+    private JButton clearButton;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -99,6 +100,12 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 captureService.stopCapture();
+            }
+        });
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                captureService.clearHistory();
             }
         });
     }

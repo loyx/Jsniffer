@@ -48,6 +48,7 @@ public class CaptureService {
     }
     public void stopCapture(){
         System.out.println("stop capture");
+        pcap.breakloop();
         pcap.close();
     }
 
@@ -56,5 +57,10 @@ public class CaptureService {
     }
     public String getPacketHex(int index){
         return extractors.get(index).toHexDump();
+    }
+
+    public void clearHistory() {
+        extractors.clear();
+        model.setColumnCount(0);
     }
 }
