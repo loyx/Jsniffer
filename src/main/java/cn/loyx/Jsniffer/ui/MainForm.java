@@ -35,6 +35,7 @@ public class MainForm {
     private JPanel statusBar;
     private JLabel statusBarDevName;
     private JLabel statusBarCaptureStatus;
+    private JComboBox<String> disStyleComboBox;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -43,6 +44,7 @@ public class MainForm {
     // services
     private final DevicesService devicesService;
     private final CaptureService captureService;
+    private String packetDisplayStyle;
 
     public MainForm() {
         // initial field
@@ -56,20 +58,30 @@ public class MainForm {
 
 
         // set GUI
+        createStatusBar();
         createButtons();
         createFilerBar();
         createInitialCardPanel();
         createContentCardPanel();
 
+
+    }
+
+    private void createStatusBar() {
+        // set status Bar
+        statusBarCaptureStatus.setText("stop");
+        packetDisplayStyle = (String) disStyleComboBox.getSelectedItem();
+
+        disStyleComboBox.addItemListener(e -> {
+            packetDisplayStyle = (String) disStyleComboBox.getSelectedItem();
+            packetDetailArea.setText(captureService.getPacketDetail(packetTable.getSelectedRow(), packetDisplayStyle));
+        });
     }
 
     private void createButtons() {
         startButton.setEnabled(false);
         stopButton.setEnabled(false);
         saveButton.setEnabled(false);
-
-        // set status Bar
-        statusBarCaptureStatus.setText("stop");
 
         devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
         startButton.addActionListener(e -> {
@@ -212,7 +224,7 @@ public class MainForm {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = packetTable.getSelectedRow();
                 if (selectedRow != -1){
-                    packetDetailArea.setText(captureService.getPacketDetail(selectedRow));
+                    packetDetailArea.setText(captureService.getPacketDetail(selectedRow, packetDisplayStyle));
                     packetHexArea.setText(captureService.getPacketHex(selectedRow));
                     packetDetailArea.repaint();
                     packetHexArea.repaint();

@@ -117,7 +117,9 @@ public class CaptureService {
 //        pcap.close(); // no close
     }
 
-    public String getPacketDetail(int index){
+    public String getPacketDetail(int index, String style){
+        if (style.equals("Xml"))
+            return showList.get(index).toXmlFormatterDump();
         return showList.get(index).toTextFormatterDump();
     }
     public String getPacketHex(int index){
