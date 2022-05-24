@@ -1,14 +1,14 @@
 package cn.loyx.Jsniffer.capture.Protocols.network;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 
 public class Ip4Extractor extends Extractor {
     private final Ip4 ip4;
 
-    public Ip4Extractor(JPacket packet) {
+    public Ip4Extractor(PcapPacket packet) {
         super(packet);
         ip4 = packet.getHeader(new Ip4());
     }

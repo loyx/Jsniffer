@@ -10,7 +10,7 @@ import cn.loyx.Jsniffer.capture.Protocols.network.Ip6Extractor;
 import cn.loyx.Jsniffer.capture.Protocols.tcpip.TCPExtractor;
 import cn.loyx.Jsniffer.capture.Protocols.tcpip.UdpExtractor;
 import cn.loyx.Jsniffer.capture.Protocols.wan.PppExtractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.protocol.JProtocol;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Icmp;
@@ -43,12 +43,12 @@ public class Extractors {
     }};
     private static final int PROTOCOL_HEADER_OFFSET = 2;
 
-    public static Extractor createExtractor(JPacket packet){
+    public static Extractor createExtractor(PcapPacket packet){
         for (int i = 0; i < protocolsHeaderId.length; i++) {
             if (packet.hasHeader(protocolsHeaderId[i])){
                 Class<? extends Extractor> extractorClass = protocolsExtractor.get(i);
                 try {
-                    Constructor<? extends Extractor> constructor = extractorClass.getConstructor(JPacket.class);
+                    Constructor<? extends Extractor> constructor = extractorClass.getConstructor(PcapPacket.class);
                     return constructor.newInstance(packet);
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                          InvocationTargetException e) {

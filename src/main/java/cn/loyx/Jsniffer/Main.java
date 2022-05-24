@@ -8,6 +8,8 @@ import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.JPacketHandler;
+import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.PcapPacketHandler;
 
 import javax.swing.*;
 import java.io.PrintStream;
@@ -45,12 +47,11 @@ public class Main {
         int select = new Scanner(System.in).nextInt();
 
         PcapIf dev = devs.get(select);
-        JPacketHandler<PrintStream> handler = new JPacketHandler<PrintStream>() {
+        PcapPacketHandler<Object> handler = new PcapPacketHandler<Object>() {
             @Override
-            public void nextPacket(JPacket packet, PrintStream user) {
+            public void nextPacket(PcapPacket packet, Object user) {
                 Extractor extractor = Extractors.createExtractor(packet);
                 System.out.println(extractor);
-//                System.out.println(extractor.toTextFormatterDump());
             }
         };
 
@@ -58,7 +59,7 @@ public class Main {
 
         // set filter
         PcapBpfProgram filter = new PcapBpfProgram();
-        int r = pcap.compile(filter, "udp", 1, 0);
+        int r = pcap.compile(filter, "", 1, 0);
         if (r != Pcap.OK){
             throw new RuntimeException("filter error!");
         }

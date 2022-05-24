@@ -5,6 +5,8 @@ import cn.loyx.Jsniffer.capture.Extractors;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.JPacketHandler;
+import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.PcapPacketHandler;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
@@ -25,9 +27,9 @@ public class CaptureService {
         System.out.println("start capture:" + devName);
         StringBuilder errBuf = new StringBuilder();
         pcap = Pcap.openLive(devName, Pcap.DEFAULT_SNAPLEN, Pcap.DEFAULT_PROMISC, 60*1000, errBuf);
-        JPacketHandler<DefaultTableModel> handler = new JPacketHandler<DefaultTableModel>() {
+        PcapPacketHandler<Object> handler = new PcapPacketHandler<Object>() {
             @Override
-            public void nextPacket(JPacket packet, DefaultTableModel user) {
+            public void nextPacket(PcapPacket packet, Object user) {
                 Extractor extractor = Extractors.createExtractor(packet);
                 Object[] rowData = {
                         extractor.getNo(),

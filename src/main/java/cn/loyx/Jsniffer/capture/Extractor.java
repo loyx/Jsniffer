@@ -1,6 +1,8 @@
 package cn.loyx.Jsniffer.capture;
 
 import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.PcapPacketHandler;
 import org.jnetpcap.packet.format.TextFormatter;
 import org.jnetpcap.packet.format.XmlFormatter;
 
@@ -13,9 +15,9 @@ public abstract class Extractor implements ModelAccessor {
 
     private static final ThreadLocal<XmlFormatter> XmlFormatterPool =
             ThreadLocal.withInitial(() -> new XmlFormatter(new StringBuilder()));
-    private final JPacket packet;
+    private final PcapPacket packet;
 
-    public Extractor(JPacket packet){
+    public Extractor(PcapPacket packet){
         this.packet = packet;
     }
 

@@ -2,13 +2,14 @@ package cn.loyx.Jsniffer.capture.Protocols.lan;
 
 import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 
 public class EthernetExtractor extends Extractor {
     private final Ethernet eth;
 
-    public EthernetExtractor(JPacket packet) {
+    public EthernetExtractor(PcapPacket packet) {
         super(packet);
         eth = packet.getHeader(new Ethernet());
     }

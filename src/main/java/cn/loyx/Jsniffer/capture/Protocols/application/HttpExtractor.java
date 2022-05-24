@@ -2,6 +2,7 @@ package cn.loyx.Jsniffer.capture.Protocols.application;
 
 import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Http;
@@ -10,7 +11,7 @@ public class HttpExtractor extends Extractor {
     private final Http http;
     private final Ip4 ip4;
 
-    public HttpExtractor(JPacket packet) {
+    public HttpExtractor(PcapPacket packet) {
         super(packet);
         http = packet.getHeader(new Http());
         ip4 = packet.getHeader(new Ip4());

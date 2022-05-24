@@ -1,7 +1,7 @@
 package cn.loyx.Jsniffer.capture.Protocols.tcpip;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
@@ -10,7 +10,7 @@ public class TCPExtractor extends Extractor {
     private final Tcp tcp;
     private final Ip4 ip4;
     private final String[] flags = {"CWR", "ECE", "URG", "ACK", "PSH", "RST", "SYN", "FIN"};
-    public TCPExtractor(JPacket packet) {
+    public TCPExtractor(PcapPacket packet) {
         super(packet);
         tcp = packet.getHeader(new Tcp());
         ip4 = packet.getHeader(new Ip4());

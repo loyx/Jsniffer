@@ -1,7 +1,7 @@
 package cn.loyx.Jsniffer.capture.Protocols.tcpip;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
@@ -11,7 +11,7 @@ public class UdpExtractor extends Extractor {
     private final Udp udp;
     private final String source;
     private final String destination;
-    public UdpExtractor(JPacket packet) {
+    public UdpExtractor(PcapPacket packet) {
         super(packet);
         udp = packet.getHeader(new Udp());
         if (packet.hasHeader(Ip4.ID)){

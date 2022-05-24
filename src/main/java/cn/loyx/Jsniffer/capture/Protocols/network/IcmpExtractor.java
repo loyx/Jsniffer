@@ -1,7 +1,7 @@
 package cn.loyx.Jsniffer.capture.Protocols.network;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Icmp;
 import org.jnetpcap.protocol.network.Ip4;
@@ -9,7 +9,7 @@ import org.jnetpcap.protocol.network.Ip4;
 public class IcmpExtractor extends Extractor {
     private final Icmp icmp;
     private final Ip4 ip4;
-    public IcmpExtractor(JPacket packet) {
+    public IcmpExtractor(PcapPacket packet) {
         super(packet);
         icmp = packet.getHeader(new Icmp());
         ip4 = packet.getHeader(new Ip4());

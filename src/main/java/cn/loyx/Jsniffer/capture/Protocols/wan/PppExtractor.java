@@ -1,12 +1,12 @@
 package cn.loyx.Jsniffer.capture.Protocols.wan;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.protocol.wan.PPP;
 
 public class PppExtractor extends Extractor {
     private final PPP ppp;
-    public PppExtractor(JPacket packet) {
+    public PppExtractor(PcapPacket packet) {
         super(packet);
         ppp = packet.getHeader(new PPP());
     }

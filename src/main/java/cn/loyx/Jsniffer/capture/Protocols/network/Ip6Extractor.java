@@ -1,13 +1,13 @@
 package cn.loyx.Jsniffer.capture.Protocols.network;
 
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
+import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip6;
 
 public class Ip6Extractor extends Extractor {
     private final Ip6 ip6;
-    public Ip6Extractor(JPacket packet) {
+    public Ip6Extractor(PcapPacket packet) {
         super(packet);
         ip6 = packet.getHeader(new Ip6());
     }
