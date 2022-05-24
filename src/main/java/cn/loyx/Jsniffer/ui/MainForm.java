@@ -4,29 +4,29 @@ import cn.loyx.Jsniffer.service.CaptureService;
 import cn.loyx.Jsniffer.service.DevicesService;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
 public class MainForm {
     private JPanel root;
-    private JTextField filter;
     private JTable packetTable;
     private JButton devicesButton;
     private JButton startButton;
     private JButton stopButton;
     private JButton saveButton;
     private JButton loadButton;
-    private JTextField filterField;
+    private JTextField filterBar;
     private JPanel toolPanel;
     private JPanel contentPanel;
     private JPanel capturePanel;
     private JPanel initialPanel;
-    private JTextField initialFilter;
+    private JTextField initialFilterBar;
     private JTable devicesTable;
     private JComboBox<String> deviceTypes;
     private JTextArea packetDetailArea;
@@ -54,21 +54,10 @@ public class MainForm {
 
         // set GUI
         createButtons();
+        createFilerBar();
         createInitialCardPanel();
         createContentCardPanel();
 
-        packetTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int selectedRow = packetTable.getSelectedRow();
-                if (selectedRow != -1){
-                    packetDetailArea.setText(captureService.getPacketDetail(selectedRow));
-                    packetHexArea.setText(captureService.getPacketHex(selectedRow));
-                    packetDetailArea.repaint();
-                    packetHexArea.repaint();
-                }
-            }
-        });
     }
 
     private void createButtons() {
@@ -150,7 +139,23 @@ public class MainForm {
 
     private void createContentCardPanel() {
         createPacketTable();
+    }
 
+    private void createFilerBar() {
+        filterBar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                captureService.setNewFilterExpression(filterBar.getText());
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                captureService.setNewFilterExpression(filterBar.getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                captureService.setNewFilterExpression(filterBar.getText());
+            }
+        });
     }
 
     private void createInitialCardPanel() {
@@ -195,22 +200,25 @@ public class MainForm {
         return root;
     }
 
-    public TableModel getPacketTableModel() {
-        return packetTableModel;
-    }
-
     private void createPacketTable() {
+
         packetTable.setModel(packetTableModel);
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setMaxWidth(50);
         packetTable.getTableHeader().setReorderingAllowed(false);
+
+        packetTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = packetTable.getSelectedRow();
+                if (selectedRow != -1){
+                    packetDetailArea.setText(captureService.getPacketDetail(selectedRow));
+                    packetHexArea.setText(captureService.getPacketHex(selectedRow));
+                    packetDetailArea.repaint();
+                    packetHexArea.repaint();
+                }
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("MainForm");
-        frame.setContentPane(new MainForm().root);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800);
-        frame.setVisible(true);
-    }
 }

@@ -14,23 +14,19 @@ public class CaptureService {
     private final DefaultTableModel model;
     private final PcapBpfProgram filter;
     private Pcap pcap;
-    private final Deque<Extractor> bufQueue;
+    private final LinkedList<Extractor> bufList;
     private final List<Extractor> showList;
 
 
-    private String filerExpress = "";
-    private boolean validFilterExpress;
+    private String filerExpression = "";
+    private boolean validFilterExpression;
 
 
     public CaptureService(DefaultTableModel model) {
         this.model = model;
-        bufQueue = new LinkedList<>();
+        bufList = new LinkedList<>();
         showList = new ArrayList<>();
         filter = new PcapBpfProgram();
-    }
-
-    public void setFilerExpress(String filerExpress) {
-        this.filerExpress = filerExpress;
     }
 
     public void startCapture(String devName){
@@ -39,33 +35,53 @@ public class CaptureService {
         pcap = Pcap.openLive(devName, Pcap.DEFAULT_SNAPLEN, Pcap.DEFAULT_PROMISC, 60*1000, errBuf);
         checkFilter();
 
-        PcapPacketHandler<Object> handler = (packet, user) -> captureNewPacket(Extractors.createExtractor(packet));
+        PcapPacketHandler<Object> handler = (packet, user) -> {
+            Extractor extractor = Extractors.createExtractor(packet);
+            bufListAdd(extractor);
+            if (validFilterExpression){
+                filerAdd(extractor);
+            }
+        };
         Thread thread = new Thread(() -> pcap.loop(Pcap.LOOP_INFINITE, handler, model));
         thread.start();
 
     }
 
     private void checkFilter() {
-        validFilterExpress = pcap.compile(filter, filerExpress, 1, 0) == 0;
+        validFilterExpression = Pcap.compileNoPcap(Pcap.DEFAULT_SNAPLEN, 1, filter, filerExpression, 1, 0) != -1;
     }
 
-    private void captureNewPacket(Extractor extractor) {
-        bufQueue.add(extractor);
-        if (validFilterExpress){
-            int s = WinPcap.offlineFilter(filter, extractor.getPacket().getCaptureHeader(), extractor.getPacket());
-            if (s != 0){
-                showList.add(extractor);
-                model.addRow(new Object[]{
-                        extractor.getNo(),
-                        extractor.getTimeStamp(),
-                        extractor.getSource(),
-                        extractor.getDestination(),
-                        extractor.getProtocol(),
-                        extractor.getLength(),
-                        extractor.getInfo()
-                });
+    public void setNewFilterExpression(String exp){
+        filerExpression = exp;
+        checkFilter();
+        if (!validFilterExpression) return;
+        synchronized (this){
+            showList.clear();
+            model.setRowCount(0);
+            for (Extractor extractor : bufList) {
+                filerAdd(extractor);
             }
+        } // need repaint
+    }
+
+    private void filerAdd(Extractor extractor) {
+        int s = WinPcap.offlineFilter(filter, extractor.getPacket().getCaptureHeader(), extractor.getPacket());
+        if (s != 0){
+            showList.add(extractor);
+            model.addRow(new Object[]{
+                    extractor.getNo(),
+                    extractor.getTimeStamp(),
+                    extractor.getSource(),
+                    extractor.getDestination(),
+                    extractor.getProtocol(),
+                    extractor.getLength(),
+                    extractor.getInfo()
+            });
         }
+    }
+
+    synchronized private void bufListAdd(Extractor extractor) {
+        bufList.add(extractor);
     }
 
     public void stopCapture(){
@@ -82,8 +98,8 @@ public class CaptureService {
     }
 
     public void clearHistory() {
-        bufQueue.clear();
+        bufList.clear();
         showList.clear();
-        model.setColumnCount(0);
+        model.setRowCount(0);
     }
 }
