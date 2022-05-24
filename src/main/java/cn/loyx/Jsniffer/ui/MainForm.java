@@ -105,7 +105,7 @@ public class MainForm {
             @Override
             public boolean accept(File f) {
                 if (f.isDirectory()) return true;
-                else return f.getName().toLowerCase().equals(".jsn");
+                else return f.getName().toLowerCase().endsWith(".jsn");
             }
             @Override
             public String getDescription() {
@@ -120,7 +120,8 @@ public class MainForm {
                 fileChooser.setCurrentDirectory(currentDir);
                 fileChooser.setFileFilter(jSnifferFileType);
                 if (fileChooser.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
-                    System.out.println("save file to " + fileChooser.getSelectedFile());
+                    System.out.println("save file to " + fileChooser.getSelectedFile().getPath());
+                    captureService.dumpToFile(fileChooser.getSelectedFile().getPath());
                 }
             }
         });
@@ -131,7 +132,8 @@ public class MainForm {
                 fileChooser.setCurrentDirectory(currentDir);
                 fileChooser.setFileFilter(jSnifferFileType);
                 if (fileChooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
-                    System.out.println("load file from " + fileChooser.getSelectedFile());
+                    System.out.println("load file from " + fileChooser.getSelectedFile().getPath());
+                    captureService.loadFromFile(fileChooser.getSelectedFile().getPath());
                 }
             }
         });

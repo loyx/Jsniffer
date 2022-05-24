@@ -7,6 +7,7 @@ import org.jnetpcap.packet.format.TextFormatter;
 import org.jnetpcap.packet.format.XmlFormatter;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 public abstract class Extractor implements ModelAccessor {
