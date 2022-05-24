@@ -95,7 +95,11 @@ public class MainForm {
             // update status bar
             statusBarCaptureStatus.setText("stop");
         });
-        clearButton.addActionListener(e -> captureService.clearHistory());
+        clearButton.addActionListener(e -> {
+            captureService.clearHistory();
+            packetHexArea.setText("");
+            packetDetailArea.setText("");
+        });
 
         File currentDir = new File("."); // current directory
         FileFilter jSnifferFileType = new FileFilter() {
