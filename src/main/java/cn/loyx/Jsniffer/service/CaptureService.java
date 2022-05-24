@@ -3,35 +3,59 @@ package cn.loyx.Jsniffer.service;
 import cn.loyx.Jsniffer.capture.Extractor;
 import cn.loyx.Jsniffer.capture.Extractors;
 import org.jnetpcap.Pcap;
-import org.jnetpcap.packet.JPacket;
-import org.jnetpcap.packet.JPacketHandler;
-import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.packet.PcapPacketHandler;
+import org.jnetpcap.winpcap.WinPcap;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CaptureService {
     private final DefaultTableModel model;
+    private final PcapBpfProgram filter;
     private Pcap pcap;
-    private List<Extractor> extractors;
+    private final Deque<Extractor> bufQueue;
+    private final List<Extractor> showList;
+
+
+    private String filerExpress = "";
+    private boolean validFilterExpress;
+
 
     public CaptureService(DefaultTableModel model) {
         this.model = model;
-        extractors = new ArrayList<>();
+        bufQueue = new LinkedList<>();
+        showList = new ArrayList<>();
+        filter = new PcapBpfProgram();
+    }
+
+    public void setFilerExpress(String filerExpress) {
+        this.filerExpress = filerExpress;
     }
 
     public void startCapture(String devName){
         System.out.println("start capture:" + devName);
         StringBuilder errBuf = new StringBuilder();
         pcap = Pcap.openLive(devName, Pcap.DEFAULT_SNAPLEN, Pcap.DEFAULT_PROMISC, 60*1000, errBuf);
-        PcapPacketHandler<Object> handler = new PcapPacketHandler<Object>() {
-            @Override
-            public void nextPacket(PcapPacket packet, Object user) {
-                Extractor extractor = Extractors.createExtractor(packet);
-                Object[] rowData = {
+        checkFilter();
+
+        PcapPacketHandler<Object> handler = (packet, user) -> captureNewPacket(Extractors.createExtractor(packet));
+        Thread thread = new Thread(() -> pcap.loop(Pcap.LOOP_INFINITE, handler, model));
+        thread.start();
+
+    }
+
+    private void checkFilter() {
+        validFilterExpress = pcap.compile(filter, filerExpress, 1, 0) == 0;
+    }
+
+    private void captureNewPacket(Extractor extractor) {
+        bufQueue.add(extractor);
+        if (validFilterExpress){
+            int s = WinPcap.offlineFilter(filter, extractor.getPacket().getCaptureHeader(), extractor.getPacket());
+            if (s != 0){
+                showList.add(extractor);
+                model.addRow(new Object[]{
                         extractor.getNo(),
                         extractor.getTimeStamp(),
                         extractor.getSource(),
@@ -39,15 +63,11 @@ public class CaptureService {
                         extractor.getProtocol(),
                         extractor.getLength(),
                         extractor.getInfo()
-                };
-                model.addRow(rowData);
-                extractors.add(extractor);
+                });
             }
-        };
-        Thread thread = new Thread(() -> pcap.loop(Pcap.LOOP_INFINITE, handler, model));
-        thread.start();
-
+        }
     }
+
     public void stopCapture(){
         System.out.println("stop capture");
         pcap.breakloop();
@@ -55,14 +75,15 @@ public class CaptureService {
     }
 
     public String getPacketDetail(int index){
-        return extractors.get(index).toTextFormatterDump();
+        return showList.get(index).toTextFormatterDump();
     }
     public String getPacketHex(int index){
-        return extractors.get(index).toHexDump();
+        return showList.get(index).toHexDump();
     }
 
     public void clearHistory() {
-        extractors.clear();
+        bufQueue.clear();
+        showList.clear();
         model.setColumnCount(0);
     }
 }

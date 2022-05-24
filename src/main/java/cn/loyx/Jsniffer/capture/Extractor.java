@@ -21,6 +21,9 @@ public abstract class Extractor implements ModelAccessor {
         this.packet = packet;
     }
 
+    public PcapPacket getPacket() {
+        return packet;
+    }
     @Override
     public long getNo() {
         return packet.getState().getFrameNumber();
