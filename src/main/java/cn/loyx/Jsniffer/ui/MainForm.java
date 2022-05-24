@@ -65,40 +65,22 @@ public class MainForm {
         stopButton.setEnabled(false);
         saveButton.setEnabled(false);
 
-        devicesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                contentPanelLayout.show(contentPanel, initialPanel.getName());
-            }
-        });
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (devicesTable.getSelectedRow() != -1){
-                    // switch card
-                    contentPanelLayout.show(contentPanel, capturePanel.getName());
+        devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
+        startButton.addActionListener(e -> {
+            if (devicesTable.getSelectedRow() != -1){
+                // switch card
+                contentPanelLayout.show(contentPanel, capturePanel.getName());
 
-                    // enable stop and save
-                    stopButton.setEnabled(true);
-                    saveButton.setEnabled(true);
+                // enable stop and save
+                stopButton.setEnabled(true);
+                saveButton.setEnabled(true);
 
-                    // start capture
-                    captureService.startCapture(devicesService.getSelectDev());
-                }
+                // start capture
+                captureService.startCapture(devicesService.getSelectDev());
             }
         });
-        stopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                captureService.stopCapture();
-            }
-        });
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                captureService.clearHistory();
-            }
-        });
+        stopButton.addActionListener(e -> captureService.stopCapture());
+        clearButton.addActionListener(e -> captureService.clearHistory());
 
         File currentDir = new File("."); // current directory
         FileFilter jSnifferFileType = new FileFilter() {
@@ -113,28 +95,22 @@ public class MainForm {
             }
         };
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(currentDir);
-                fileChooser.setFileFilter(jSnifferFileType);
-                if (fileChooser.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
-                    System.out.println("save file to " + fileChooser.getSelectedFile().getPath());
-                    captureService.dumpToFile(fileChooser.getSelectedFile().getPath());
-                }
+        saveButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(currentDir);
+            fileChooser.setFileFilter(jSnifferFileType);
+            if (fileChooser.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
+                System.out.println("save file to " + fileChooser.getSelectedFile().getPath());
+                captureService.dumpToFile(fileChooser.getSelectedFile().getPath());
             }
         });
-        loadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(currentDir);
-                fileChooser.setFileFilter(jSnifferFileType);
-                if (fileChooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
-                    System.out.println("load file from " + fileChooser.getSelectedFile().getPath());
-                    captureService.loadFromFile(fileChooser.getSelectedFile().getPath());
-                }
+        loadButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(currentDir);
+            fileChooser.setFileFilter(jSnifferFileType);
+            if (fileChooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
+                System.out.println("load file from " + fileChooser.getSelectedFile().getPath());
+                captureService.loadFromFile(fileChooser.getSelectedFile().getPath());
             }
         });
     }

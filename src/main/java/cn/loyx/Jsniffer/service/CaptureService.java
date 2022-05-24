@@ -9,11 +9,9 @@ import org.jnetpcap.packet.PcapPacketHandler;
 import org.jnetpcap.winpcap.WinPcap;
 
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CaptureService {
     private final DefaultTableModel model;
