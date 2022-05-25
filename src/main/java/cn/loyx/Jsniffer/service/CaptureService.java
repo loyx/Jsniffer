@@ -97,7 +97,7 @@ public class CaptureService {
             showList.add(extractor);
             model.addRow(new Object[]{
                     extractor.getNo(),
-                    extractor.getTimeStamp(),
+                    extractor.getTimeStamp().toString(),
                     extractor.getSource(),
                     extractor.getDestination(),
                     extractor.getProtocol(),

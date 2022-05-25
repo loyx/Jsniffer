@@ -12,6 +12,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class MainForm {
     private JPanel root;
@@ -53,7 +55,18 @@ public class MainForm {
         // initial field
         contentPanelLayout = (CardLayout) contentPanel.getLayout();
         String[] columnNames = {"No.", "Time", "Source", "Destination", "Protocol", "Length", "Info"};
-        packetTableModel = new DefaultTableModel(columnNames, 0);
+        packetTableModel = new DefaultTableModel(columnNames, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0 || columnIndex == 5) return Integer.class;
+                else return String.class;
+            }
+        };
 
         // initial services
         devicesService = new DevicesService();
