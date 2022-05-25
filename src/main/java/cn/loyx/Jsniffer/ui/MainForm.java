@@ -36,6 +36,7 @@ public class MainForm {
     private JLabel statusBarDevName;
     private JLabel statusBarCaptureStatus;
     private JComboBox<String> disStyleComboBox;
+    private JLabel filterBarLabel;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -84,6 +85,13 @@ public class MainForm {
         stopButton.setEnabled(false);
         clearButton.setEnabled(false);
         saveButton.setEnabled(false);
+
+        devicesButton.setIcon(buttonIcon("src/main/resources/icons/devs.png"));
+        startButton.setIcon(buttonIcon("src/main/resources/icons/start.png"));
+        stopButton.setIcon(buttonIcon("src/main/resources/icons/stop.png"));
+        clearButton.setIcon(buttonIcon("src/main/resources/icons/clear.png"));
+        saveButton.setIcon(buttonIcon("src/main/resources/icons/save.png"));
+        loadButton.setIcon(buttonIcon("src/main/resources/icons/load.png"));
 
         devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
         startButton.addActionListener(e -> {
@@ -154,11 +162,16 @@ public class MainForm {
         });
     }
 
+    private Icon buttonIcon(String path) {
+        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+    }
+
     private void createContentCardPanel() {
         createPacketTable();
     }
 
     private void createFilerBar() {
+        filterBarLabel.setIcon(buttonIcon("src/main/resources/icons/search.png"));
         filterBar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

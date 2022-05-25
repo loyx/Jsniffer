@@ -80,12 +80,12 @@
               <text value=""/>
             </properties>
           </component>
-          <component id="11533" class="javax.swing.JLabel">
+          <component id="11533" class="javax.swing.JLabel" binding="filterBarLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <horizontalTextPosition value="4"/>
+              <iconTextGap value="1"/>
               <labelFor value="dce75"/>
               <text value=" filter:"/>
               <verticalTextPosition value="1"/>
@@ -202,7 +202,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="df3f8" binding="capturePanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="df3f8" binding="capturePanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <card name="capturePanel"/>
@@ -283,12 +283,10 @@
               <grid id="efcb9" binding="statusBar" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="50" height="50"/>
-                  </grid>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="bevel-lowered" title=" status bar"/>
+                <border type="none"/>
                 <children>
                   <component id="f6bea" class="javax.swing.JLabel" binding="statusBarDevName">
                     <constraints>
@@ -348,6 +346,12 @@
                   </component>
                 </children>
               </grid>
+              <component id="5cbaf" class="javax.swing.JSeparator">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
             </children>
           </grid>
         </children>
