@@ -70,6 +70,7 @@ public class MainForm {
     private void createStatusBar() {
         // set status Bar
         statusBarCaptureStatus.setText("stop");
+        statusBarDevName.setText("Dev: None");
         packetDisplayStyle = (String) disStyleComboBox.getSelectedItem();
 
         disStyleComboBox.addItemListener(e -> {
@@ -81,6 +82,7 @@ public class MainForm {
     private void createButtons() {
         startButton.setEnabled(false);
         stopButton.setEnabled(false);
+        clearButton.setEnabled(false);
         saveButton.setEnabled(false);
 
         devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
@@ -91,6 +93,7 @@ public class MainForm {
 
                 // enable stop and save
                 stopButton.setEnabled(true);
+                clearButton.setEnabled(true);
                 saveButton.setEnabled(true);
 
                 // update status bar
@@ -136,12 +139,17 @@ public class MainForm {
             }
         });
         loadButton.addActionListener(e -> {
+            // switch to content panel
+            contentPanelLayout.show(contentPanel, capturePanel.getName());
+
+            // choose load file
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(currentDir);
             fileChooser.setFileFilter(jSnifferFileType);
             if (fileChooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION){
                 System.out.println("load file from " + fileChooser.getSelectedFile().getPath());
                 captureService.loadFromFile(fileChooser.getSelectedFile().getPath());
+                statusBarCaptureStatus.setText("Load file form " + fileChooser.getSelectedFile().getName());
             }
         });
     }
