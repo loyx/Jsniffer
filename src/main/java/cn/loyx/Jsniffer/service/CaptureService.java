@@ -78,17 +78,18 @@ public class CaptureService {
         validFilterExpression = Pcap.compileNoPcap(Pcap.DEFAULT_SNAPLEN, 1, filter, filterExpression, 1, 0) != -1;
     }
 
-    public void setNewFilterExpression(String exp){
+    public boolean setNewFilterExpression(String exp){
         filterExpression = exp;
         checkFilter();
-        if (!validFilterExpression) return;
+        if (!validFilterExpression) return false;
         synchronized (this){
             showList.clear();
             model.setRowCount(0);
             for (Extractor extractor : bufList) {
                 filterAdd(extractor);
             }
-        } // need repaint
+        }
+        return true;
     }
 
     private void filterAdd(Extractor extractor) {

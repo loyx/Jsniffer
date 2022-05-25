@@ -228,17 +228,24 @@ public class MainForm {
     private void createFilerBar() {
         filterBarLabel.setIcon(resizeIcon("src/main/resources/icons/search.png"));
         filterBar.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void setFilter() {
+                if (captureService.setNewFilterExpression(filterBar.getText()))
+                    filterBar.putClientProperty("JComponent.outline", "");
+                else
+                    filterBar.putClientProperty("JComponent.outline", "error");
+            }
             @Override
             public void insertUpdate(DocumentEvent e) {
-                captureService.setNewFilterExpression(filterBar.getText());
+                setFilter();
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
-                captureService.setNewFilterExpression(filterBar.getText());
+                setFilter();
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
-                captureService.setNewFilterExpression(filterBar.getText());
+                setFilter();
             }
         });
     }
