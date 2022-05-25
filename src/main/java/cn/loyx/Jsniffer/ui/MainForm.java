@@ -37,7 +37,7 @@ public class MainForm {
     private JLabel statusBarCaptureStatus;
     private JComboBox<String> disStyleComboBox;
     private JLabel filterBarLabel;
-    private JLabel statusBarCaptureIcon;
+    private JLabel statusBarButtonStatusIcon;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -103,7 +103,7 @@ public class MainForm {
             if (uiStatusCapturing){
                 captureService.stopCapture();
                 statusBarCaptureStatus.setText(null);
-                statusBarCaptureIcon.setIcon(null);
+                statusBarButtonStatusIcon.setIcon(null);
             }
             stopButton.setEnabled(false);
             clearButton.setEnabled(false);
@@ -122,7 +122,7 @@ public class MainForm {
                 // update status bar
                 statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
                 statusBarCaptureStatus.setText("Capturing...");
-                statusBarCaptureIcon.setIcon(resizeIcon("src/main/resources/icons/capturing.png"));
+                statusBarButtonStatusIcon.setIcon(resizeIcon("src/main/resources/icons/capturing.png"));
 
                 // start capture
                 captureService.startCapture(devicesService.getSelectDev());
@@ -136,7 +136,7 @@ public class MainForm {
 
             // update status bar
             statusBarCaptureStatus.setText("stop");
-            statusBarCaptureIcon.setIcon(resizeIcon("src/main/resources/icons/stopCapturing.png"));
+            statusBarButtonStatusIcon.setIcon(resizeIcon("src/main/resources/icons/stopCapturing.png"));
 
             // update ui status
             uiStatusCapturing = false;
@@ -145,6 +145,21 @@ public class MainForm {
             captureService.clearHistory();
             packetHexArea.setText("");
             packetDetailArea.setText("");
+        });
+        clearButton.addMouseListener(new MouseAdapter() {
+
+            private final Icon clearIcon = resizeIcon("src/main/resources/icons/clearStatus.png");
+            private Icon preIcon;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                preIcon = statusBarButtonStatusIcon.getIcon();
+                statusBarButtonStatusIcon.setIcon(clearIcon);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                statusBarButtonStatusIcon.setIcon(preIcon);
+            }
         });
 
         File currentDir = new File("."); // current directory
