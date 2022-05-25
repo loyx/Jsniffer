@@ -12,10 +12,10 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.sql.Date;
-import java.sql.Timestamp;
 
 public class MainForm {
+    private final Icon stopCapturingIcon = resizeIcon("src/main/resources/icons/stopCapturing.png");
+    private final Icon capturingIcon = resizeIcon("src/main/resources/icons/capturing.png");
     private JPanel root;
     private JTable packetTable;
     private JButton devicesButton;
@@ -40,6 +40,7 @@ public class MainForm {
     private JComboBox<String> disStyleComboBox;
     private JLabel filterBarLabel;
     private JLabel statusBarButtonStatusIcon;
+    private JLabel JSnifferLabel;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -67,6 +68,8 @@ public class MainForm {
                 else return String.class;
             }
         };
+        JSnifferLabel.setIcon(new ImageIcon(new ImageIcon("src/main/resources/logo.png")
+                .getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH)));
 
         // initial services
         devicesService = new DevicesService();
@@ -89,6 +92,7 @@ public class MainForm {
     private void createStatusBar() {
         // set status Bar
         statusBarCaptureStatus.setText("stop");
+        statusBarButtonStatusIcon.setIcon(stopCapturingIcon);
         statusBarDevName.setText("Dev: None");
         packetDisplayStyle = (String) disStyleComboBox.getSelectedItem();
 
@@ -135,7 +139,7 @@ public class MainForm {
                 // update status bar
                 statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
                 statusBarCaptureStatus.setText("Capturing...");
-                statusBarButtonStatusIcon.setIcon(resizeIcon("src/main/resources/icons/capturing.png"));
+                statusBarButtonStatusIcon.setIcon(capturingIcon);
 
                 // start capture
                 captureService.startCapture(devicesService.getSelectDev());
@@ -149,7 +153,7 @@ public class MainForm {
 
             // update status bar
             statusBarCaptureStatus.setText("stop");
-            statusBarButtonStatusIcon.setIcon(resizeIcon("src/main/resources/icons/stopCapturing.png"));
+            statusBarButtonStatusIcon.setIcon(stopCapturingIcon);
 
             // update ui status
             uiStatusCapturing = false;

@@ -20,7 +20,8 @@ public class Main {
         frame.setIconImage(logo);
         frame.setContentPane(new MainForm().getRoot());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800);
+        frame.setSize(1200, 900);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }
