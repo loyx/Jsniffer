@@ -37,7 +37,7 @@ public class MainForm {
     private JLabel statusBarCaptureStatus;
     private JComboBox<String> disStyleComboBox;
     private JLabel filterBarLabel;
-    private JLabel capturingIcon;
+    private JLabel statusBarCaptureIcon;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -47,6 +47,7 @@ public class MainForm {
     private final DevicesService devicesService;
     private final CaptureService captureService;
     private String packetDisplayStyle;
+    private boolean uiStatusCapturing;
 
     public MainForm() {
         // initial field
@@ -57,6 +58,9 @@ public class MainForm {
         // initial services
         devicesService = new DevicesService();
         captureService = new CaptureService(packetTableModel);
+
+        // initial ui status
+        uiStatusCapturing = false;
 
 
         // set GUI
@@ -87,14 +91,24 @@ public class MainForm {
         clearButton.setEnabled(false);
         saveButton.setEnabled(false);
 
-        devicesButton.setIcon(resizeIcon("src/main/resources/icons/devs.png", 20, 20));
-        startButton.setIcon(resizeIcon("src/main/resources/icons/start.png", 20, 20));
-        stopButton.setIcon(resizeIcon("src/main/resources/icons/stop.png", 20, 20));
-        clearButton.setIcon(resizeIcon("src/main/resources/icons/clear.png", 20, 20));
-        saveButton.setIcon(resizeIcon("src/main/resources/icons/save.png", 20, 20));
-        loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png", 20, 20));
+        devicesButton.setIcon(resizeIcon("src/main/resources/icons/devs.png"));
+        startButton.setIcon(resizeIcon("src/main/resources/icons/start.png"));
+        stopButton.setIcon(resizeIcon("src/main/resources/icons/stop.png"));
+        clearButton.setIcon(resizeIcon("src/main/resources/icons/clear.png"));
+        saveButton.setIcon(resizeIcon("src/main/resources/icons/save.png"));
+        loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png"));
 
-        devicesButton.addActionListener(e -> contentPanelLayout.show(contentPanel, initialPanel.getName()));
+        devicesButton.addActionListener(e -> {
+            contentPanelLayout.show(contentPanel, initialPanel.getName());
+            if (uiStatusCapturing){
+                captureService.stopCapture();
+                statusBarCaptureStatus.setText(null);
+                statusBarCaptureIcon.setIcon(null);
+            }
+            stopButton.setEnabled(false);
+            clearButton.setEnabled(false);
+            saveButton.setEnabled(false);
+        });
         startButton.addActionListener(e -> {
             if (devicesTable.getSelectedRow() != -1){
                 // switch card
@@ -108,10 +122,13 @@ public class MainForm {
                 // update status bar
                 statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
                 statusBarCaptureStatus.setText("Capturing...");
-                capturingIcon.setIcon(resizeIcon("src/main/resources/icons/capturing.png", 20, 20));
+                statusBarCaptureIcon.setIcon(resizeIcon("src/main/resources/icons/capturing.png"));
 
                 // start capture
                 captureService.startCapture(devicesService.getSelectDev());
+
+                // set ui status
+                uiStatusCapturing = true;
             }
         });
         stopButton.addActionListener(e -> {
@@ -119,7 +136,10 @@ public class MainForm {
 
             // update status bar
             statusBarCaptureStatus.setText("stop");
-            capturingIcon.setIcon(resizeIcon("src/main/resources/icons/stopCapturing.png", 20, 20));
+            statusBarCaptureIcon.setIcon(resizeIcon("src/main/resources/icons/stopCapturing.png"));
+
+            // update ui status
+            uiStatusCapturing = false;
         });
         clearButton.addActionListener(e -> {
             captureService.clearHistory();
@@ -165,8 +185,8 @@ public class MainForm {
         });
     }
 
-    private Icon resizeIcon(String path, int width, int height) {
-        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    private Icon resizeIcon(String path) {
+        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     }
 
     private void createContentCardPanel() {
@@ -174,7 +194,7 @@ public class MainForm {
     }
 
     private void createFilerBar() {
-        filterBarLabel.setIcon(resizeIcon("src/main/resources/icons/search.png", 20, 20));
+        filterBarLabel.setIcon(resizeIcon("src/main/resources/icons/search.png"));
         filterBar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
