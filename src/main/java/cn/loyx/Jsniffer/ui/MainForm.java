@@ -42,6 +42,7 @@ public class MainForm {
     private JLabel JSnifferLabel;
     private JScrollPane packetScrollPane;
     private JButton colorTableButton;
+    private JButton scrollEndButton;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -126,6 +127,8 @@ public class MainForm {
         loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png"));
         colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
         colorTableButton.setToolTipText("Colored table");
+        scrollEndButton.setIcon(resizeIcon("src/main/resources/icons/scroll_down.png"));
+        scrollEndButton.setToolTipText("Scroll to end");
 
         devicesButton.addActionListener(e -> {
             contentPanelLayout.show(contentPanel, initialPanel.getName());
@@ -235,6 +238,12 @@ public class MainForm {
                 else colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
                 coloredPacketTableEffect.setColored(coloredPacketTable);
                 packetTable.repaint();
+            }
+        });
+        scrollEndButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                packetTable.scrollRectToVisible(packetTable.getCellRect(packetTable.getRowCount()-1, 0, true));
             }
         });
     }
