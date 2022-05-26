@@ -41,6 +41,7 @@ public class MainForm {
     private JLabel statusBarButtonStatusIcon;
     private JLabel JSnifferLabel;
     private JScrollPane packetScrollPane;
+    private JButton colorTableButton;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -52,10 +53,10 @@ public class MainForm {
     // services
     private final DevicesService devicesService;
     private final CaptureService captureService;
+    private ColoredTableEffect coloredPacketTableEffect;
 
     public MainForm() {
         // initial field
-        coloredPacketTable = false;
         contentPanelLayout = (CardLayout) contentPanel.getLayout();
         String[] columnNames = {"No.", "Time", "Source", "Destination", "Protocol", "Length", "Info"};
         packetTableModel = new DefaultTableModel(columnNames, 0){
@@ -76,9 +77,11 @@ public class MainForm {
         // initial services
         devicesService = new DevicesService();
         captureService = new CaptureService(packetTableModel);
+        coloredPacketTableEffect = new ColoredTableEffect(captureService);
 
         // initial ui status
         uiStatusCapturing = false;
+        coloredPacketTable = false;
 
 
         // enable auto scroll
@@ -121,6 +124,8 @@ public class MainForm {
         clearButton.setIcon(resizeIcon("src/main/resources/icons/clear.png"));
         saveButton.setIcon(resizeIcon("src/main/resources/icons/save.png"));
         loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png"));
+        colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
+        colorTableButton.setToolTipText("Colored table");
 
         devicesButton.addActionListener(e -> {
             contentPanelLayout.show(contentPanel, initialPanel.getName());
@@ -222,6 +227,16 @@ public class MainForm {
                 statusBarCaptureStatus.setText("Load file form " + fileChooser.getSelectedFile().getName());
             }
         });
+        colorTableButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                coloredPacketTable = !coloredPacketTable;
+                if (coloredPacketTable) colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
+                else colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
+                coloredPacketTableEffect.setColored(coloredPacketTable);
+                packetTable.repaint();
+            }
+        });
     }
 
     private Icon resizeIcon(String path) {
@@ -312,10 +327,9 @@ public class MainForm {
         packetTable.setModel(packetTableModel);
 
         // set color hover effect
-        ColoredTableEffect coloredTableEffect = new ColoredTableEffect(captureService);
-        coloredTableEffect.enableColoredTable();
-        packetTable.setDefaultRenderer(Object.class, coloredTableEffect);
-        packetTable.addMouseMotionListener(coloredTableEffect);
+        coloredPacketTableEffect.setColored(coloredPacketTable);
+        packetTable.setDefaultRenderer(Object.class, coloredPacketTableEffect);
+        packetTable.addMouseMotionListener(coloredPacketTableEffect);
 
         // set table header alignment
         ((DefaultTableCellRenderer) packetTable.getTableHeader().getDefaultRenderer())
@@ -324,13 +338,13 @@ public class MainForm {
         // set columns style
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(0).setCellRenderer(coloredTableEffect);
+        columnModel.getColumn(0).setCellRenderer(coloredPacketTableEffect);
         columnModel.getColumn(1).setPreferredWidth(200);
         columnModel.getColumn(2).setPreferredWidth(150);
         columnModel.getColumn(3).setPreferredWidth(150);
         columnModel.getColumn(4).setPreferredWidth(100);
         columnModel.getColumn(5).setPreferredWidth(100);
-        columnModel.getColumn(5).setCellRenderer(coloredTableEffect);
+        columnModel.getColumn(5).setCellRenderer(coloredPacketTableEffect);
         columnModel.getColumn(6).setPreferredWidth(800);
 
         // disable drag

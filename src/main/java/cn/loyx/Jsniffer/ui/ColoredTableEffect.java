@@ -31,12 +31,8 @@ public class ColoredTableEffect extends DefaultTableCellRenderer implements Mous
         this.service = service;
     }
 
-    public void enableColoredTable(){
-        colored = true;
-    }
-
-    public void disableColoredTable(){
-        colored = false;
+    public void setColored(boolean colored) {
+        this.colored = colored;
     }
 
     @Override
