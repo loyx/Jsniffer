@@ -6,12 +6,13 @@ import cn.loyx.Jsniffer.service.DevicesService;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.Collections;
 
 public class MainForm {
     private final Icon stopCapturingIcon = resizeIcon("src/main/resources/icons/stopCapturing.png");
@@ -302,11 +303,36 @@ public class MainForm {
 
     private void createPacketTable() {
 
+        // set data model
         packetTable.setModel(packetTableModel);
+
+        // row color style
+        DefaultTableCellRenderer colorRender = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//                c.setBackground(Color.yellow);
+                return c;
+            }
+        };
+        packetTable.setDefaultRenderer(Object.class, colorRender);
+
+        // set columns style
         TableColumnModel columnModel = packetTable.getColumnModel();
-        columnModel.getColumn(0).setMaxWidth(50);
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(0).setCellRenderer(colorRender);
+        columnModel.getColumn(1).setPreferredWidth(200);
+        columnModel.getColumn(2).setPreferredWidth(200);
+        columnModel.getColumn(3).setPreferredWidth(200);
+        columnModel.getColumn(4).setPreferredWidth(100);
+        columnModel.getColumn(5).setPreferredWidth(100);
+        columnModel.getColumn(5).setCellRenderer(colorRender);
+        columnModel.getColumn(6).setPreferredWidth(600);
+
+        // disable drag
         packetTable.getTableHeader().setReorderingAllowed(false);
 
+        // set MouserListener
         packetTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
