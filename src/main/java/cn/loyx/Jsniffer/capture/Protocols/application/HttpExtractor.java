@@ -2,7 +2,6 @@ package cn.loyx.Jsniffer.capture.Protocols.application;
 
 import cn.loyx.Jsniffer.capture.DisplayColors;
 import cn.loyx.Jsniffer.capture.Extractor;
-import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;

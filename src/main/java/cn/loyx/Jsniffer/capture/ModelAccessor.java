@@ -1,6 +1,5 @@
 package cn.loyx.Jsniffer.capture;
 
-import java.awt.*;
 import java.sql.Timestamp;
 
 public interface ModelAccessor {

@@ -230,22 +230,14 @@ public class MainForm {
                 statusBarCaptureStatus.setText("Load file form " + fileChooser.getSelectedFile().getName());
             }
         });
-        colorTableButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                coloredPacketTable = !coloredPacketTable;
-                if (coloredPacketTable) colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
-                else colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
-                coloredPacketTableEffect.setColored(coloredPacketTable);
-                packetTable.repaint();
-            }
+        colorTableButton.addActionListener(e -> {
+            coloredPacketTable = !coloredPacketTable;
+            if (coloredPacketTable) colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
+            else colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
+            coloredPacketTableEffect.setColored(coloredPacketTable);
+            packetTable.repaint();
         });
-        scrollEndButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                packetTable.scrollRectToVisible(packetTable.getCellRect(packetTable.getRowCount()-1, 0, true));
-            }
-        });
+        scrollEndButton.addActionListener(e -> packetTable.scrollRectToVisible(packetTable.getCellRect(packetTable.getRowCount()-1, 0, true)));
     }
 
     private Icon resizeIcon(String path) {

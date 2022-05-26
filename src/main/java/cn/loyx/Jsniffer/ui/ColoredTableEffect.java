@@ -8,7 +8,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.util.List;
 
 public class ColoredTableEffect extends DefaultTableCellRenderer implements MouseMotionListener {
     int row=-1;
