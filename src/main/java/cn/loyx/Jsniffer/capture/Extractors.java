@@ -41,7 +41,6 @@ public class Extractors {
         add(PppExtractor.class);
         add(EthernetExtractor.class);
     }};
-    private static final int PROTOCOL_HEADER_OFFSET = 2;
 
     public static Extractor createExtractor(PcapPacket packet){
         for (int i = 0; i < protocolsHeaderId.length; i++) {

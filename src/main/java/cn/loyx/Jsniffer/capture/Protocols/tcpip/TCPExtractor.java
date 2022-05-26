@@ -1,10 +1,13 @@
 package cn.loyx.Jsniffer.capture.Protocols.tcpip;
 
+import cn.loyx.Jsniffer.capture.DisplayColors;
 import cn.loyx.Jsniffer.capture.Extractor;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
+
+import java.awt.*;
 
 public class TCPExtractor extends Extractor {
     private final Tcp tcp;
@@ -29,6 +32,29 @@ public class TCPExtractor extends Extractor {
     @Override
     public String getProtocol() {
         return tcp.getName();
+    }
+
+    @Override
+    public DisplayColors getColors() {
+        if (tcp.flags_SYN() || tcp.flags_FIN()){
+            return new DisplayColors(
+                    new Color(0x909eaa),
+                    new Color(0x809cb3),
+                    new Color(0x809cb3)
+            );
+        }
+        if (tcp.flags_RST()){
+            return new DisplayColors(
+                    new Color(0xa40000),
+                    new Color(0x831c33),
+                    new Color(0x930e1a)
+            );
+        }
+        return new DisplayColors(
+                new Color(0xb9d4ff),
+                new Color(0xe7e6ff),
+                new Color(0xcfddff)
+        );
     }
 
     @Override

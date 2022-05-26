@@ -6,13 +6,11 @@ import cn.loyx.Jsniffer.service.DevicesService;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.Collections;
 
 public class MainForm {
     private final Icon stopCapturingIcon = resizeIcon("src/main/resources/icons/stopCapturing.png");
@@ -47,15 +45,17 @@ public class MainForm {
     // field
     private final CardLayout contentPanelLayout;
     private final DefaultTableModel packetTableModel;
+    private String packetDisplayStyle;
+    private boolean uiStatusCapturing;
+    private boolean coloredPacketTable;
 
     // services
     private final DevicesService devicesService;
     private final CaptureService captureService;
-    private String packetDisplayStyle;
-    private boolean uiStatusCapturing;
 
     public MainForm() {
         // initial field
+        coloredPacketTable = false;
         contentPanelLayout = (CardLayout) contentPanel.getLayout();
         String[] columnNames = {"No.", "Time", "Source", "Destination", "Protocol", "Length", "Info"};
         packetTableModel = new DefaultTableModel(columnNames, 0){
@@ -271,9 +271,9 @@ public class MainForm {
 
         devicesTable.setModel(defaultTableModel);
 
-        TableHoverEffect tableHoverEffect = new TableHoverEffect();
-        devicesTable.setDefaultRenderer(Object.class, tableHoverEffect);
-        devicesTable.addMouseMotionListener(tableHoverEffect);
+        ColoredTableEffect coloredTableEffect = new ColoredTableEffect();
+        devicesTable.setDefaultRenderer(Object.class, coloredTableEffect);
+        devicesTable.addMouseMotionListener(coloredTableEffect);
 
         devicesTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -312,9 +312,10 @@ public class MainForm {
         packetTable.setModel(packetTableModel);
 
         // set color hover effect
-        TableHoverEffect tableHoverEffect = new TableHoverEffect();
-        packetTable.setDefaultRenderer(Object.class, tableHoverEffect);
-        packetTable.addMouseMotionListener(tableHoverEffect);
+        ColoredTableEffect coloredTableEffect = new ColoredTableEffect(captureService);
+        coloredTableEffect.enableColoredTable();
+        packetTable.setDefaultRenderer(Object.class, coloredTableEffect);
+        packetTable.addMouseMotionListener(coloredTableEffect);
 
         // set table header alignment
         ((DefaultTableCellRenderer) packetTable.getTableHeader().getDefaultRenderer())
@@ -323,13 +324,13 @@ public class MainForm {
         // set columns style
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(0).setCellRenderer(tableHoverEffect);
+        columnModel.getColumn(0).setCellRenderer(coloredTableEffect);
         columnModel.getColumn(1).setPreferredWidth(200);
         columnModel.getColumn(2).setPreferredWidth(150);
         columnModel.getColumn(3).setPreferredWidth(150);
         columnModel.getColumn(4).setPreferredWidth(100);
         columnModel.getColumn(5).setPreferredWidth(100);
-        columnModel.getColumn(5).setCellRenderer(tableHoverEffect);
+        columnModel.getColumn(5).setCellRenderer(coloredTableEffect);
         columnModel.getColumn(6).setPreferredWidth(800);
 
         // disable drag

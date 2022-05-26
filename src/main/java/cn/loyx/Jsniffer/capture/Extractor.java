@@ -1,13 +1,11 @@
 package cn.loyx.Jsniffer.capture;
 
-import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.packet.PcapPacketHandler;
 import org.jnetpcap.packet.format.TextFormatter;
 import org.jnetpcap.packet.format.XmlFormatter;
 
+import java.awt.*;
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 public abstract class Extractor implements ModelAccessor {
@@ -75,6 +73,15 @@ public abstract class Extractor implements ModelAccessor {
         } catch (IOException e) {
             throw new RuntimeException(out.toString(), e);
         }
+    }
+
+    @Override
+    public DisplayColors getColors() {
+        return new DisplayColors(
+                new Color(0xcce8ff),
+                Color.white,
+                new Color(0xe5f3ff)
+        );
     }
 
     @Override

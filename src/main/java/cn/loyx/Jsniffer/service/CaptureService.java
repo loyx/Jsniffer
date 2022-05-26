@@ -1,5 +1,6 @@
 package cn.loyx.Jsniffer.service;
 
+import cn.loyx.Jsniffer.capture.DisplayColors;
 import cn.loyx.Jsniffer.capture.Extractor;
 import cn.loyx.Jsniffer.capture.Extractors;
 import org.jnetpcap.Pcap;
@@ -131,5 +132,9 @@ public class CaptureService {
         bufList.clear();
         showList.clear();
         model.setRowCount(0);
+    }
+
+    public DisplayColors getColors(int row) {
+        return showList.get(row).getColors();
     }
 }

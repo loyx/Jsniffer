@@ -1,5 +1,6 @@
 package cn.loyx.Jsniffer.capture;
 
+import java.awt.*;
 import java.sql.Timestamp;
 
 public interface ModelAccessor {
@@ -13,4 +14,6 @@ public interface ModelAccessor {
     String toHexDump();
     String toTextFormatterDump();
     String toXmlFormatterDump();
+
+    DisplayColors getColors();
 }
