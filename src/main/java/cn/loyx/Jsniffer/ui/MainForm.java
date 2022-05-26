@@ -41,6 +41,7 @@ public class MainForm {
     private JLabel filterBarLabel;
     private JLabel statusBarButtonStatusIcon;
     private JLabel JSnifferLabel;
+    private JScrollPane packetScrollPane;
 
     // field
     private final CardLayout contentPanelLayout;
@@ -77,6 +78,10 @@ public class MainForm {
 
         // initial ui status
         uiStatusCapturing = false;
+
+
+        // enable auto scroll
+        new SmartScroller(packetScrollPane);
 
 
         // set GUI
