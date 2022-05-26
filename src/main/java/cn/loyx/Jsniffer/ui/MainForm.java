@@ -53,7 +53,7 @@ public class MainForm {
     // services
     private final DevicesService devicesService;
     private final CaptureService captureService;
-    private ColoredTableEffect coloredPacketTableEffect;
+    private final ColoredTableEffect coloredPacketTableEffect;
 
     public MainForm() {
         // initial field
@@ -81,7 +81,7 @@ public class MainForm {
 
         // initial ui status
         uiStatusCapturing = false;
-        coloredPacketTable = false;
+        coloredPacketTable = true;
 
 
         // enable auto scroll
@@ -124,7 +124,7 @@ public class MainForm {
         clearButton.setIcon(resizeIcon("src/main/resources/icons/clear.png"));
         saveButton.setIcon(resizeIcon("src/main/resources/icons/save.png"));
         loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png"));
-        colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
+        colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
         colorTableButton.setToolTipText("Colored table");
 
         devicesButton.addActionListener(e -> {
