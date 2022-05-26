@@ -104,7 +104,8 @@ public class MainForm {
 
         disStyleComboBox.addItemListener(e -> {
             packetDisplayStyle = (String) disStyleComboBox.getSelectedItem();
-            packetDetailArea.setText(captureService.getPacketDetail(packetTable.getSelectedRow(), packetDisplayStyle));
+            int selectedRow = packetTable.getSelectedRow();
+            if (selectedRow != -1)packetDetailArea.setText(captureService.getPacketDetail(selectedRow, packetDisplayStyle));
         });
     }
 
