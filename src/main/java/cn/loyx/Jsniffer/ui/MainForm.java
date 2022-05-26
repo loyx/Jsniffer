@@ -271,6 +271,10 @@ public class MainForm {
 
         devicesTable.setModel(defaultTableModel);
 
+        TableHoverEffect tableHoverEffect = new TableHoverEffect();
+        devicesTable.setDefaultRenderer(Object.class, tableHoverEffect);
+        devicesTable.addMouseMotionListener(tableHoverEffect);
+
         devicesTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -307,27 +311,21 @@ public class MainForm {
         // set data model
         packetTable.setModel(packetTableModel);
 
-        // row color style
-        DefaultTableCellRenderer colorRender = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//                c.setBackground(Color.yellow);
-                return c;
-            }
-        };
-        packetTable.setDefaultRenderer(Object.class, colorRender);
+        // set color hover effect
+        TableHoverEffect tableHoverEffect = new TableHoverEffect();
+        packetTable.setDefaultRenderer(Object.class, tableHoverEffect);
+        packetTable.addMouseMotionListener(tableHoverEffect);
 
         // set columns style
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(0).setCellRenderer(colorRender);
+        columnModel.getColumn(0).setCellRenderer(tableHoverEffect);
         columnModel.getColumn(1).setPreferredWidth(200);
         columnModel.getColumn(2).setPreferredWidth(200);
         columnModel.getColumn(3).setPreferredWidth(200);
         columnModel.getColumn(4).setPreferredWidth(100);
         columnModel.getColumn(5).setPreferredWidth(100);
-        columnModel.getColumn(5).setCellRenderer(colorRender);
+        columnModel.getColumn(5).setCellRenderer(tableHoverEffect);
         columnModel.getColumn(6).setPreferredWidth(600);
 
         // disable drag
