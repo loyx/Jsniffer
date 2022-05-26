@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,7 +17,9 @@ public class Main {
         FlatLightLaf.setup();
 
         JFrame frame = new JFrame("Jsniffer");
-        Image logo = new ImageIcon("src/main/resources/logo.png").getImage();
+        URL resource = Main.class.getResource("/logo.png");
+        assert resource != null;
+        Image logo = new ImageIcon(resource).getImage();
         frame.setIconImage(logo);
         frame.setContentPane(new MainForm().getRoot());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

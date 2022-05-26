@@ -11,10 +11,11 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.net.URL;
 
 public class MainForm {
-    private final Icon stopCapturingIcon = resizeIcon("src/main/resources/icons/stopCapturing.png");
-    private final Icon capturingIcon = resizeIcon("src/main/resources/icons/capturing.png");
+    private final Icon stopCapturingIcon = resizeIcon("/icons/stopCapturing.png");
+    private final Icon capturingIcon = resizeIcon("/icons/capturing.png");
     private JPanel root;
     private JTable packetTable;
     private JButton devicesButton;
@@ -72,7 +73,9 @@ public class MainForm {
                 else return String.class;
             }
         };
-        JSnifferLabel.setIcon(new ImageIcon(new ImageIcon("src/main/resources/logo.png")
+        URL resource = this.getClass().getResource("/logo.png");
+        assert resource != null;
+        JSnifferLabel.setIcon(new ImageIcon(new ImageIcon(resource)
                 .getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH)));
 
         // initial services
@@ -119,15 +122,15 @@ public class MainForm {
         clearButton.setEnabled(false);
         saveButton.setEnabled(false);
 
-        devicesButton.setIcon(resizeIcon("src/main/resources/icons/devs.png"));
-        startButton.setIcon(resizeIcon("src/main/resources/icons/start.png"));
-        stopButton.setIcon(resizeIcon("src/main/resources/icons/stop.png"));
-        clearButton.setIcon(resizeIcon("src/main/resources/icons/clear.png"));
-        saveButton.setIcon(resizeIcon("src/main/resources/icons/save.png"));
-        loadButton.setIcon(resizeIcon("src/main/resources/icons/load.png"));
-        colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
+        devicesButton.setIcon(resizeIcon("/icons/devs.png"));
+        startButton.setIcon(resizeIcon("/icons/start.png"));
+        stopButton.setIcon(resizeIcon("/icons/stop.png"));
+        clearButton.setIcon(resizeIcon("/icons/clear.png"));
+        saveButton.setIcon(resizeIcon("/icons/save.png"));
+        loadButton.setIcon(resizeIcon("/icons/load.png"));
+        colorTableButton.setIcon(resizeIcon("/icons/table_color.png"));
         colorTableButton.setToolTipText("Colored table");
-        scrollEndButton.setIcon(resizeIcon("src/main/resources/icons/scroll_down.png"));
+        scrollEndButton.setIcon(resizeIcon("/icons/scroll_down.png"));
         scrollEndButton.setToolTipText("Scroll to end");
 
         devicesButton.addActionListener(e -> {
@@ -180,7 +183,7 @@ public class MainForm {
         });
         clearButton.addMouseListener(new MouseAdapter() {
 
-            private final Icon clearIcon = resizeIcon("src/main/resources/icons/clearStatus.png");
+            private final Icon clearIcon = resizeIcon("/icons/clearStatus.png");
             private Icon preIcon;
 
             @Override
@@ -232,8 +235,8 @@ public class MainForm {
         });
         colorTableButton.addActionListener(e -> {
             coloredPacketTable = !coloredPacketTable;
-            if (coloredPacketTable) colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_color.png"));
-            else colorTableButton.setIcon(resizeIcon("src/main/resources/icons/table_fill.png"));
+            if (coloredPacketTable) colorTableButton.setIcon(resizeIcon("/icons/table_color.png"));
+            else colorTableButton.setIcon(resizeIcon("/icons/table_fill.png"));
             coloredPacketTableEffect.setColored(coloredPacketTable);
             packetTable.repaint();
         });
@@ -241,7 +244,9 @@ public class MainForm {
     }
 
     private Icon resizeIcon(String path) {
-        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        URL resource = this.getClass().getResource(path);
+        assert resource != null;
+        return new ImageIcon(new ImageIcon(resource).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     }
 
     private void createContentCardPanel() {
@@ -249,7 +254,7 @@ public class MainForm {
     }
 
     private void createFilerBar() {
-        filterBarLabel.setIcon(resizeIcon("src/main/resources/icons/search.png"));
+        filterBarLabel.setIcon(resizeIcon("/icons/search.png"));
         filterBar.getDocument().addDocumentListener(new DocumentListener() {
 
             private void setFilter() {
