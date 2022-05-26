@@ -253,7 +253,7 @@
                       <component id="98fbd" class="javax.swing.JTable" binding="packetTable">
                         <constraints/>
                         <properties>
-                          <autoCreateRowSorter value="true"/>
+                          <autoResizeMode value="0"/>
                         </properties>
                       </component>
                     </children>

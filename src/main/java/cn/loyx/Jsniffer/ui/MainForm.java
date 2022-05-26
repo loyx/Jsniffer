@@ -316,17 +316,21 @@ public class MainForm {
         packetTable.setDefaultRenderer(Object.class, tableHoverEffect);
         packetTable.addMouseMotionListener(tableHoverEffect);
 
+        // set table header alignment
+        ((DefaultTableCellRenderer) packetTable.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(JLabel.LEFT);
+
         // set columns style
         TableColumnModel columnModel = packetTable.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
         columnModel.getColumn(0).setCellRenderer(tableHoverEffect);
         columnModel.getColumn(1).setPreferredWidth(200);
-        columnModel.getColumn(2).setPreferredWidth(200);
-        columnModel.getColumn(3).setPreferredWidth(200);
+        columnModel.getColumn(2).setPreferredWidth(150);
+        columnModel.getColumn(3).setPreferredWidth(150);
         columnModel.getColumn(4).setPreferredWidth(100);
         columnModel.getColumn(5).setPreferredWidth(100);
         columnModel.getColumn(5).setCellRenderer(tableHoverEffect);
-        columnModel.getColumn(6).setPreferredWidth(600);
+        columnModel.getColumn(6).setPreferredWidth(800);
 
         // disable drag
         packetTable.getTableHeader().setReorderingAllowed(false);
