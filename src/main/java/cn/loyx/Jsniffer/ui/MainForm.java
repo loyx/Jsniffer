@@ -12,6 +12,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.URL;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainForm {
     private final Icon stopCapturingIcon = resizeIcon("/icons/stopCapturing.png");
@@ -135,6 +140,7 @@ public class MainForm {
 
         devicesButton.addActionListener(e -> {
             contentPanelLayout.show(contentPanel, initialPanel.getName());
+            devicesService.refreshDevices();
             if (uiStatusCapturing){
                 captureService.stopCapture();
                 statusBarCaptureStatus.setText(null);
@@ -148,6 +154,7 @@ public class MainForm {
             if (devicesTable.getSelectedRow() != -1){
                 // switch card
                 contentPanelLayout.show(contentPanel, capturePanel.getName());
+                devicesService.clearPacketCnt();
 
                 // enable stop and save
                 stopButton.setEnabled(true);
@@ -283,7 +290,7 @@ public class MainForm {
     }
 
     private void createDevicesTable() {
-        DefaultTableModel defaultTableModel = new DefaultTableModel(getDeviceData(), new Object[]{"Devices"}) {
+        DefaultTableModel defaultTableModel = new DefaultTableModel(getDeviceData(), new Object[]{"Devices", "flow"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -291,6 +298,12 @@ public class MainForm {
         };
 
         devicesTable.setModel(defaultTableModel);
+        ScheduledExecutorService exe = Executors.newSingleThreadScheduledExecutor();
+        exe.scheduleAtFixedRate(() -> {
+            for (int i = 0; i < defaultTableModel.getRowCount(); i++) {
+                defaultTableModel.setValueAt(devicesService.getPacketCntValue(i), i, 1);
+            }
+        }, 1, 1, TimeUnit.SECONDS);
 
         ColoredTableEffect coloredTableEffect = new ColoredTableEffect();
         devicesTable.setDefaultRenderer(Object.class, coloredTableEffect);
@@ -305,6 +318,7 @@ public class MainForm {
                 }
                 if (e.getClickCount() == 2){
                     contentPanelLayout.show(contentPanel, capturePanel.getName());
+                    devicesService.clearPacketCnt();
 
                     // update status bar
                     statusBarDevName.setText("Dev: " + devicesService.getSelectDevName());
@@ -318,7 +332,7 @@ public class MainForm {
         String[] devicesName = devicesService.getDevicesDescription();
         Object[][] data = new Object[devicesName.length][];
         for (int i = 0; i < devicesName.length; i++) {
-            data[i] = new Object[]{devicesName[i]};
+            data[i] = new Object[]{devicesName[i], 0};
         }
         return data;
     }
