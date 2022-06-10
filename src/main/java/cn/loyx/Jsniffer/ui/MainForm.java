@@ -2,21 +2,21 @@ package cn.loyx.Jsniffer.ui;
 
 import cn.loyx.Jsniffer.service.CaptureService;
 import cn.loyx.Jsniffer.service.DevicesService;
+import org.jfree.data.xy.XYSeries;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class MainForm {
     private final Icon stopCapturingIcon = resizeIcon("/icons/stopCapturing.png");
@@ -140,7 +140,13 @@ public class MainForm {
 
         devicesButton.addActionListener(e -> {
             contentPanelLayout.show(contentPanel, initialPanel.getName());
+            DefaultTableModel model = (DefaultTableModel) devicesTable.getModel();
+            if (model != null){
+                model.setRowCount(0);
+                model.setDataVector(getDeviceData(), new Object[]{"devices", "packets"});
+            }
             devicesService.refreshDevices();
+            setChartPanel();
             if (uiStatusCapturing){
                 captureService.stopCapture();
                 statusBarCaptureStatus.setText(null);
@@ -298,12 +304,7 @@ public class MainForm {
         };
 
         devicesTable.setModel(defaultTableModel);
-        ScheduledExecutorService exe = Executors.newSingleThreadScheduledExecutor();
-        exe.scheduleAtFixedRate(() -> {
-            for (int i = 0; i < defaultTableModel.getRowCount(); i++) {
-                defaultTableModel.setValueAt(devicesService.getPacketCntValue(i), i, 1);
-            }
-        }, 1, 1, TimeUnit.SECONDS);
+        setChartPanel();
 
         ColoredTableEffect coloredTableEffect = new ColoredTableEffect();
         devicesTable.setDefaultRenderer(Object.class, coloredTableEffect);
@@ -326,6 +327,13 @@ public class MainForm {
                 super.mouseClicked(e);
             }
         });
+    }
+
+    private void setChartPanel() {
+        List<XYSeries> packetsSeries = devicesService.getPacketsSeries();
+        CurveTableEffect curveTableEffect = new CurveTableEffect(packetsSeries);
+        devicesTable.getColumnModel().getColumn(1).setCellRenderer(curveTableEffect);
+        devicesService.setPlotService(devicesTable);
     }
 
     private Object[][] getDeviceData(){
