@@ -32,4 +32,5 @@ Jsniffer:.
 ![image](https://user-images.githubusercontent.com/30404367/170503389-64180a1e-66c8-4abb-af17-01451fd2d761.png)
 ## 3. 加载与保存
 ![image](https://user-images.githubusercontent.com/30404367/170504256-b3b0cfb5-bd8c-4809-90d6-055e5958f79a.png)
-
+## License
+The Jsniffer is released under version 2.0 of [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
