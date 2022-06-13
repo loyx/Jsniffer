@@ -331,6 +331,7 @@ public class MainForm {
 
     private void setChartPanel() {
         List<XYSeries> packetsSeries = devicesService.getPacketsSeries();
+        devicesService.setSeriesLength(30);
         CurveTableEffect curveTableEffect = new CurveTableEffect(packetsSeries);
         devicesTable.getColumnModel().getColumn(1).setCellRenderer(curveTableEffect);
         devicesService.setPlotService(devicesTable);
