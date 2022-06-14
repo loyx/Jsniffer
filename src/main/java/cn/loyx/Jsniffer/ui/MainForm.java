@@ -309,6 +309,7 @@ public class MainForm {
         ColoredTableEffect coloredTableEffect = new ColoredTableEffect();
         devicesTable.setDefaultRenderer(Object.class, coloredTableEffect);
         devicesTable.addMouseMotionListener(coloredTableEffect);
+        devicesTable.addMouseListener(coloredTableEffect);
 
         devicesTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -359,6 +360,7 @@ public class MainForm {
         coloredPacketTableEffect.setColored(coloredPacketTable);
         packetTable.setDefaultRenderer(Object.class, coloredPacketTableEffect);
         packetTable.addMouseMotionListener(coloredPacketTableEffect);
+        packetTable.addMouseListener(coloredPacketTableEffect);
 
         // set table header alignment
         ((DefaultTableCellRenderer) packetTable.getTableHeader().getDefaultRenderer())
