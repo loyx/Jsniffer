@@ -10,16 +10,15 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurveTableEffect implements TableCellRenderer {
+public class DevicesTableEffect extends HoverTableEffect{
 
     List<ChartPanel> cells;
 
-    public CurveTableEffect(List<XYSeries> seriesList){
+    public void setData(List<XYSeries> seriesList) {
         cells = new ArrayList<>(seriesList.size());
         for (XYSeries series : seriesList) {
             XYSeriesCollection data = new XYSeriesCollection(series);
@@ -37,10 +36,8 @@ public class CurveTableEffect implements TableCellRenderer {
             // remove grid line
             plot.setDomainGridlinesVisible(false);
             plot.setRangeGridlinesVisible(false);
-//             set backgroundColor
-//            plot.setBackgroundPaint(new Color(0xe5f3ff));
+            // set background
             plot.setBackgroundAlpha(0f);
-
             // set offset
             plot.setAxisOffset(new RectangleInsets(-10,-10,-10,-10));
 
@@ -52,10 +49,23 @@ public class CurveTableEffect implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        if (column == 0){
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
         try {
+            JFreeChart chart = cells.get(row).getChart();
+            if (isSelected) {
+                chart.setBackgroundPaint(defaultColors.getSelectColor());
+            } else {
+                if (this.row == row){
+                    chart.setBackgroundPaint(defaultColors.getHoverColor());
+                }else {
+                    chart.setBackgroundPaint(defaultColors.getUnselectColor());
+                }
+            }
             return cells.get(row);
         } catch (Exception e) {
-            return new JLabel("Inactivity connection");
+            return super.getTableCellRendererComponent(table, "Inactivity connection", isSelected, hasFocus, row, column);
         }
     }
 }

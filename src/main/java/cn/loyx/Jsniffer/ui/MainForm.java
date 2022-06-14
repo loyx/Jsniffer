@@ -60,7 +60,8 @@ public class MainForm {
     // services
     private final DevicesService devicesService;
     private final CaptureService captureService;
-    private final ColoredTableEffect coloredPacketTableEffect;
+    private final PacketTableEffect coloredPacketTableEffect;
+    private final DevicesTableEffect devicesTableEffect;
 
     public MainForm() {
         // initial field
@@ -86,7 +87,8 @@ public class MainForm {
         // initial services
         devicesService = new DevicesService();
         captureService = new CaptureService(packetTableModel);
-        coloredPacketTableEffect = new ColoredTableEffect(captureService);
+        coloredPacketTableEffect = new PacketTableEffect(captureService);
+        devicesTableEffect = new DevicesTableEffect();
 
         // initial ui status
         uiStatusCapturing = false;
@@ -306,10 +308,9 @@ public class MainForm {
         devicesTable.setModel(defaultTableModel);
         setChartPanel();
 
-        ColoredTableEffect coloredTableEffect = new ColoredTableEffect();
-        devicesTable.setDefaultRenderer(Object.class, coloredTableEffect);
-        devicesTable.addMouseMotionListener(coloredTableEffect);
-        devicesTable.addMouseListener(coloredTableEffect);
+        devicesTable.setDefaultRenderer(Object.class, devicesTableEffect);
+        devicesTable.addMouseMotionListener(devicesTableEffect);
+        devicesTable.addMouseListener(devicesTableEffect);
 
         devicesTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -332,9 +333,8 @@ public class MainForm {
 
     private void setChartPanel() {
         List<XYSeries> packetsSeries = devicesService.getPacketsSeries();
+        devicesTableEffect.setData(packetsSeries);
         devicesService.setSeriesLength(30);
-        CurveTableEffect curveTableEffect = new CurveTableEffect(packetsSeries);
-        devicesTable.getColumnModel().getColumn(1).setCellRenderer(curveTableEffect);
         devicesService.setPlotService(devicesTable);
     }
 
