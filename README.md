@@ -2,6 +2,8 @@
 ![image](https://user-images.githubusercontent.com/30404367/170512376-079781b2-ed4f-4345-841d-03121b8caba4.png)
 
 JSniffer 基于Jnetpcap的跨平台的抓包工具
+![mian](https://user-images.githubusercontent.com/30404367/174430752-053ccd35-59c8-4480-9f85-048f1c2cf1d1.gif)
+
 # 项目结构
 ```text
 Jsniffer:.
