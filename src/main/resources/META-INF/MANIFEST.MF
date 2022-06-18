@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: cn.loyx.Jsniffer.Main
+SplashScreen-Image: splash.png
 

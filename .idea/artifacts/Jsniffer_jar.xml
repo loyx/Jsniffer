@@ -5,6 +5,8 @@
       <element id="module-output" name="Jsniffer" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/2.2/flatlaf-2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../jnetpcap-1.4.r1425/jnetpcap.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.5.3/jfreechart-1.5.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jcommon/1.0.24/jcommon-1.0.24.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
